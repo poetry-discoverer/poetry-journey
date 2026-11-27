@@ -106,3 +106,4 @@ How the "آداب الإنجليزية: قواعد وجرامر وشعر وأس�
 41. **No doctor or lecturer attribution**: no lesson, voice script, summary, mind map, quiz, PDF, page or playbook text may name or quote the owner's college doctor or say what "the doctor" says. Outside scholars cited as plain authors are fine. Translator and site credits are stripped.
 42. **Exam headings** read "على نمط امتحانات الكلية".
 43. **Publishing**: GitHub Pages allows about 10 builds per hour, so batch several changes per push; a new page can 404 for 2-3 minutes after a push, always curl-check with `?z=$RANDOM` before reporting a link.
+44. **New lessons (this run)**: poetry-23/24 via pbuild.py (template poetry-22), history-31, myth-m23 (markdown text matched 1:1 to voice chunks), c2-13, Learn TEFL tefl-59..64 built from txt+CSV (cards 1:1), cumulative glossary 576 terms; true/false feedback order fixed in older Learn TEFL lessons.
