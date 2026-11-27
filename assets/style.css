@@ -131,3 +131,6 @@ img{max-width:100%;height:auto;content-visibility:auto}
  *,*::before,*::after{animation:none!important;transition:none!important}
  .fade{opacity:1;transform:none}
 }
+
+.course{margin:26px 0 10px}.course-h{font-size:1.5rem;font-weight:900;margin:0 0 2px}.course-sub{margin:0 0 12px;color:var(--ink-soft)}.card.soon{opacity:.7;border-style:dashed;cursor:default}.c-gray{background:#e5e5e5}
+@media(max-width:480px){.logo{white-space:nowrap;font-size:1rem}.stats .pill{padding:6px 9px}}
