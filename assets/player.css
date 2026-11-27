@@ -75,3 +75,5 @@
 @keyframes plCoin{0%{opacity:0;transform:perspective(600px) rotateY(-540deg) scale(.2)}60%{opacity:1;transform:perspective(600px) rotateY(20deg) scale(1.15)}100%{transform:perspective(600px) rotateY(0) scale(1)}}
 .pl-end{animation:plIn3 .6s cubic-bezier(.2,.85,.3,1) both}
 @media (prefers-reduced-motion:reduce){.pl-card,.pl-end,.pl-end .big{animation:none!important}}
+
+.pl-mic{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}.pl-mic>#plaudio{flex-basis:100%}.pl-micb{font:inherit;font-weight:800;font-size:16px;border:2px solid #e5e5e5;background:#fff;border-radius:14px;padding:10px 14px;cursor:pointer;color:#1cb0f6}.pl-micb.on{background:#ff4b4b;border-color:#ff4b4b;color:#fff}.pl-micst{color:#777;font-size:14px}
