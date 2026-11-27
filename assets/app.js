@@ -81,4 +81,4 @@ refreshHeader(); setupPath(); setupComplete(); setupAnswers();
 // reveal fallback: never leave content hidden (headless/no-observer cases)
 setTimeout(function(){ document.querySelectorAll('.fade:not(.in)').forEach(function(el){ el.classList.add('in'); }); }, 700);
 
-document.addEventListener('click',function(e){var r=e.target.closest&&e.target.closest('.node-row');if(!r||e.target.closest('a'))return;var a=r.querySelector('a.node');if(a)location.href=a.href;});
+document.addEventListener('click',function(e){var r=e.target.closest&&e.target.closest('.node-row');if(!r||e.target.closest("a,button"))return;var a=r.querySelector('a.node');if(a)location.href=a.href;});
