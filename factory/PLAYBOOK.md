@@ -72,3 +72,4 @@ How the "آداب اللغة الإنجليزية" site is built, so another cou
 7. **Offline card**: the "downloaded lessons" section lets the student keep a lesson offline.
 8. **Sounds toggle**: global sound switch for taps, right, wrong and done. Gated until approved.
 9. Every change the owner asks for is also written here and in the hosted playbook File.
+10. **No lesson publishes without its standard question set**: at least 4 multiple-choice or true/false questions placed INSIDE the lesson body, right after the card they test (not only in a closing exam block), plus recall and write cards at the end. Analysis, grammar, history, myth, poetry and intensive lessons are all checked with a per-lesson count (MC, TF, recall, write, and how many sit before the last learn card) before the push. A lesson with zero in-body questions is not published.
