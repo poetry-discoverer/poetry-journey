@@ -86,9 +86,9 @@ function review(){
   stopAudio(); const queue=missed.slice(); let qi=0;
   function one(){
     if(qi>=queue.length){ reviewed=true; missed=[]; sfx('done'); render(); scrollTo(0,0); return; }
-    const o=queue[qi]; let opts, ans;
+    const o=queue[qi]; let opts, ans, idxs0=[0,1,2,3];
     if(o.t==='tf'){ opts=['صح ✅','غلط ❌']; ans=o.ans?0:1; }
-    else { const idxs=o.opts.map((_,i)=>i); for(let i=idxs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idxs[i],idxs[j]]=[idxs[j],idxs[i]]; } opts=idxs.map(i=>o.opts[i]); ans=idxs.indexOf(o.ans); }
+    else { const idxs=o.opts.map((_,i)=>i); for(let i=idxs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idxs[i],idxs[j]]=[idxs[j],idxs[i]]; } opts=idxs.map(i=>o.opts[i]); ans=idxs.indexOf(o.ans); idxs0=idxs; }
     let h='<div class="pl-top"><div class="pl-bar"><i style="width:'+Math.round(qi/queue.length*100)+'%"></i></div><div class="pl-count">'+(qi+1)+' / '+queue.length+'</div></div>';
     h+='<div class="pl-card" id="plc"><div class="big">🔁</div><h2 style="margin:0 0 6px">مراجعة الأخطاء</h2><div class="pl-hint" style="color:#777;margin-bottom:10px">الأسئلة اللي غلطت فيها، حلّها صح قبل ما تخلّص.</div><div class="pl-q">'+o.q+'</div>';
     opts.forEach((t,k)=>{ h+='<button class="pl-opt" data-k="'+k+'">'+t+'</button>'; });
@@ -99,7 +99,7 @@ function review(){
       if(k===ans){ b.classList.add('right'); sfx('right'); burst(b); const q=st(); const key=LID+':rv:'+S.indexOf(o); if(!q.sx[key]){ q.sx[key]=1; save(q); xp(3); }
         fb.innerHTML='<div class="pl-fb ok">✅ صح! '+(o.why?'<div style="font-size:17px;font-weight:600;margin-top:4px">'+o.why+'</div>':'')+'<button class="pl-next" id="plgo">كمّل</button></div>';
         document.getElementById('plgo').onclick=()=>{ sfx('click'); qi++; one(); scrollTo(0,0); };
-      } else { sfx('wrong'); b.classList.add('wrong'); fb.innerHTML='<div class="pl-fb no">❌ لأ، جرّب تاني</div>'; setTimeout(()=>{b.classList.remove('wrong');b.style.opacity=.45;b.disabled=true;},420); }
+      } else { sfx('wrong'); b.classList.add('wrong'); const oix=(o.t==='tf'?k:idxs0[k]); fb.innerHTML='<div class="pl-fb no">❌ لأ، '+((o.ex&&o.ex[oix])?o.ex[oix]:'جرّب تاني')+'</div>'; setTimeout(()=>{b.classList.remove('wrong');b.style.opacity=.45;b.disabled=true;},420); }
     });
   }
   one(); scrollTo(0,0);
@@ -154,7 +154,11 @@ function render(){
         burst(b); const pts=tries===0?10:4; if(!q.sx[LID+':'+idx]){ q.sx[LID+':'+idx]=1; save(q); xp(pts, tries===0&&q.combo>=3?'🔥':''); }
         fb.innerHTML='<div class="pl-fb ok">✅ صح! '+(s.why?'<div style="font-size:17px;font-weight:600;margin-top:4px">'+s.why+'</div>':'')+'<button class="pl-next" id="plgo">كمّل</button></div>';
         document.getElementById('plgo').onclick=()=>{ sfx('click'); go(1); };
-      } else { sfx('wrong'); tries++; if(missed.indexOf(s)<0) missed.push(s); b.classList.add('wrong'); const q=st(); q.combo=0; save(q); fb.innerHTML='<div class="pl-fb no">❌ لأ، جرّب تاني</div>'; setTimeout(()=>{b.classList.remove('wrong');b.style.opacity=.45;b.disabled=true;},420); }
+      } else { sfx('wrong'); tries++; if(missed.indexOf(s)<0) missed.push(s); b.classList.add('wrong'); const q=st(); q.combo=0; save(q);
+        if(s.ex){ done=true; card.querySelectorAll('.pl-opt').forEach(o=>{ o.disabled=true; if(+o.dataset.k===(s.t==='tf'?(s.ans?0:1):s.ans)) o.classList.add('right'); });
+          const ra=(s.t==='tf'?(s.ans?0:1):s.ans); fb.innerHTML='<div class="pl-fb no"><div style="font-weight:800">❌ إجابتك مش صح</div><div style="font-size:17px;margin:6px 0">'+(s.ex[k]||'')+'</div></div><div class="pl-fb ok"><div style="font-weight:800">✅ الإجابة الصح</div><div style="font-size:17px;margin:6px 0">'+(s.ex[ra]||s.why||'')+'</div><div style="font-size:13px;color:#777">📘 الشرح من إعداد الموقع</div><button class="pl-next" id="plgo">فهمت، كمّل</button></div>';
+          document.getElementById('plgo').onclick=()=>{ sfx('click'); go(1); };
+        } else { fb.innerHTML='<div class="pl-fb no">❌ لأ، جرّب تاني</div>'; setTimeout(()=>{b.classList.remove('wrong');b.style.opacity=.45;b.disabled=true;},420); } }
     });
   }
   if(s.t==='recall'){
@@ -172,7 +176,7 @@ function render(){
     else { try{confetti()}catch(e){} setTimeout(()=>sfx('done'),50); }
   }
   refreshHeader();
-  if(!document.getElementById('plver')){ const v=document.createElement('div'); v.id='plver'; v.style.cssText='text-align:center;color:#bbb;font-size:12px;margin-top:6px;direction:ltr'; v.textContent='player v8 · audio '+(M.audio&&Object.keys(M.audio).length?Object.keys(M.audio).length+' clips (mp3)':'none'); root.appendChild(v); } else { const v=document.getElementById('plver'); root.appendChild(v); }
+  if(!document.getElementById('plver')){ const v=document.createElement('div'); v.id='plver'; v.style.cssText='text-align:center;color:#bbb;font-size:12px;margin-top:6px;direction:ltr'; v.textContent='player v9 · audio '+(M.audio&&Object.keys(M.audio).length?Object.keys(M.audio).length+' clips (mp3)':'none'); root.appendChild(v); } else { const v=document.getElementById('plver'); root.appendChild(v); }
 }
 function go(d){ if(idx+d<0||idx+d>=S.length) return; idx+=d; render(); const t=document.getElementById('plc'); if(t) window.scrollTo({top:Math.max(0,t.getBoundingClientRect().top+scrollY-90)}); }
 render();
