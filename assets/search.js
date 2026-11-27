@@ -4,11 +4,17 @@ var root=base.replace(/assets\/$/,'');
 function norm(s){s=String(s||'').toLowerCase().replace(/[\u064b-\u0652\u0670\u0640]/g,'');return s.replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه')}
 var NAMES={poetry:'الشعر',myth:'الأساطير',history:'تاريخ الشعر',intensive:'النقد',analysis:'تحليل القصائد',grammar:'القواعد',tefl:'TEFL'};
 var DATA=null,loading=false;
-function load(cb){if(DATA)return cb();if(loading)return;loading=true;var s=document.createElement('script');s.src=base+'search-index.js';s.onload=function(){DATA=window.SEARCH_INDEX;DATA.L.forEach(function(l){l.nt=norm(l.t);l.nh=norm(l.h.join(' '));l.nb=norm(l.b)});DATA.G.forEach(function(g){g.n=norm(g.t+' '+g.a+' '+g.d)});cb()};s.onerror=function(){loading=false;box.innerHTML='<p class="sr-empty">البحث محتاج إنترنت أول مرة.</p>'};document.head.appendChild(s)}
+function prep(d){d.L.forEach(function(l){l.nt=norm(l.t);l.nh=norm(l.h.join(' '));l.nb=norm(l.b)});d.G.forEach(function(g){g.n=norm(g.t+' '+g.a+' '+g.d)});return d}
+function fail(){loading=false;box.innerHTML='<p class="sr-empty">البحث محتاج إنترنت أول مرة.</p>'}
+function add(src,ok,no){var s=document.createElement('script');s.src=base+src;s.onload=ok;s.onerror=no;document.head.appendChild(s)}
+function load(cb){if(DATA)return cb();if(loading)return;loading=true;
+add('search-meta.js',function(){var K=window.SEARCH_KEYS||[],SK=scopeK(),need=(SK&&K.indexOf(SK)>-1)?[SK]:K,left=need.length,bad=false;window.SEARCH_SHARDS=window.SEARCH_SHARDS||{};
+need.forEach(function(k){add('search-index-'+k+'.js',function(){if(--left===0&&!bad){var d={L:[],G:[]};need.forEach(function(x){var sh=window.SEARCH_SHARDS[x];if(sh){d.L=d.L.concat(sh.L);d.G=d.G.concat(sh.G)}});DATA=prep(d);cb()}},function(){bad=true;fail()})})},
+function(){add('search-index.js',function(){DATA=prep(window.SEARCH_INDEX);cb()},fail)})}
 function toks(q){return norm(q).split(/[^a-z0-9\u0600-\u06ff]+/).filter(function(w){return w.length>1}).map(function(w){return w.length>3&&w.indexOf('ال')===0?w.slice(2):w})}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function snip(l,ts){var b=l.b,nb=l.nb,p=-1;for(var i=0;i<ts.length&&p<0;i++)p=nb.indexOf(ts[i]);if(p<0)return '';var a=Math.max(0,p-40);return (a?'… ':'')+esc(b.substr(a,110))+' …'}
-function scopeK(){var f=location.pathname.split('/').pop()||'index.html',m=f.match(/^track-(.+)\.html$/);if(m)return m[1]==='mythology'?'myth':m[1];if(/^modules?-tefl/.test(f))return 'tefl';if(/\/lessons\//.test(location.pathname)){var id=f.replace('.html','');var l=DATA.L.filter(function(x){return x.id===id})[0];return l?l.k:null}return null}
+function scopeK(){var f=location.pathname.split('/').pop()||'index.html',m=f.match(/^track-(.+)\.html$/);if(m)return m[1]==='mythology'?'myth':m[1];if(/^modules?-tefl/.test(f))return 'tefl';if(/\/lessons\//.test(location.pathname)){var id=f.replace('.html','');if(!DATA)return id.split('-')[0];var l=DATA.L.filter(function(x){return x.id===id})[0];return l?l.k:null}return null}
 function find(q){var ts=toks(q);if(!ts.length)return null;var out=[];var SK=scopeK();
 DATA.L.forEach(function(l){if(SK&&l.k!==SK)return;var sc=0,hit=0;ts.forEach(function(t){var h=0;if(l.nt.indexOf(t)>-1){h+=10}if(l.nh.indexOf(t)>-1){h+=5}var bi=l.nb.indexOf(t);if(bi>-1){h+=2+(l.nb.indexOf(t,bi+1)>-1?1:0)}if(h)hit++;sc+=h});if(hit===ts.length)out.push({l:l,s:sc});else if(hit&&ts.length>1&&!out.length)out.push({l:l,s:sc*0.3})});
 out.sort(function(a,b){return b.s-a.s});
