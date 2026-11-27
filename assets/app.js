@@ -192,3 +192,18 @@ return C})();
   if(document.readyState!=='loading') run(); else document.addEventListener('DOMContentLoaded',run);
   setTimeout(run,1500);
 })();
+
+/* update banner: when a newer version of the app is installed, offer one tap to reload */
+(function(){
+  if(!('serviceWorker' in navigator)||!navigator.serviceWorker.controller) return;
+  var shown=false;
+  navigator.serviceWorker.addEventListener('controllerchange',function(){
+    if(shown) return; shown=true;
+    var b=document.createElement('button'); b.type='button';
+    b.textContent='✅ في تحديث جديد للموقع، اضغط هنا للتحديث';
+    b.style.cssText='position:fixed;left:12px;right:12px;bottom:12px;z-index:90;padding:14px 16px;border:0;border-radius:16px;background:#2f7d00;color:#fff;font:700 1.05rem inherit;font-family:inherit;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer';
+    b.onclick=function(){ location.reload(); };
+    document.body.appendChild(b);
+  });
+  try{ navigator.serviceWorker.getRegistration().then(function(r){ if(r) r.update(); }); }catch(e){}
+})();
