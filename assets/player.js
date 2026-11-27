@@ -154,7 +154,7 @@ function render(){
         burst(b); const pts=tries===0?10:4; if(!q.sx[LID+':'+idx]){ q.sx[LID+':'+idx]=1; save(q); xp(pts, tries===0&&q.combo>=3?'🔥':''); }
         fb.innerHTML='<div class="pl-fb ok">✅ صح! '+(s.why?'<div style="font-size:17px;font-weight:600;margin-top:4px">'+s.why+'</div>':'')+'<button class="pl-next" id="plgo">كمّل</button></div>';
         document.getElementById('plgo').onclick=()=>{ sfx('click'); go(1); };
-      } else { sfx('wrong'); tries++; if(missed.indexOf(s)<0) missed.push(s); b.classList.add('wrong'); const q=st(); q.combo=0; save(q);
+      } else { sfx('wrong'); tries++; if(missed.indexOf(s)<0){ missed.push(s); try{ const _q=st(); _q.sr=_q.sr||{}; const _id=LID+':'+S.indexOf(s); if(!_q.sr[_id]){ _q.sr[_id]={st:0,due:Date.now()+864e5}; save(_q); } }catch(e){} } b.classList.add('wrong'); const q=st(); q.combo=0; save(q);
         if(s.ex){ done=true; card.querySelectorAll('.pl-opt').forEach(o=>{ o.disabled=true; if(+o.dataset.k===(s.t==='tf'?(s.ans?0:1):s.ans)) o.classList.add('right'); });
           const ra=(s.t==='tf'?(s.ans?0:1):s.ans); fb.innerHTML='<div class="pl-fb no"><div style="font-weight:800">❌ إجابتك مش صح</div><div style="font-size:17px;margin:6px 0">'+(s.ex[k]||'')+'</div></div><div class="pl-fb ok"><div style="font-weight:800">✅ الإجابة الصح</div><div style="font-size:17px;margin:6px 0">'+(s.ex[ra]||s.why||'')+'</div><div style="font-size:13px;color:#777">📘 الشرح من إعداد الموقع</div><button class="pl-next" id="plgo">فهمت، كمّل</button></div>';
           document.getElementById('plgo').onclick=()=>{ sfx('click'); go(1); };
