@@ -1,3 +1,4 @@
+const SITE=({'poetry-journey':{ls:'poetryJourneyV1',cn:'poetry-offline',sets:['poetry','intensive','analysis','grammar','all']},'learn-tefl':{ls:'learnTeflV1',cn:'tefl-offline',sets:['all']},'tefl-practical':{ls:'learnTeflPracticalV1',cn:'tefl2-offline',sets:['all']}})[location.pathname.split('/')[1]]||{ls:'poetryJourneyV1',cn:'poetry-offline',sets:['poetry','intensive','analysis','grammar','all']};
 (function(){
 const PAGE=document.body.dataset.page, root=document.getElementById('qz'), BANK=window.BANK||[];
 const DAY=864e5, byId={}; BANK.forEach(b=>byId[b.id]=b);
@@ -11,7 +12,7 @@ function srRight(id){ const s=S(), r=s.sr[id]; if(!r) return; if(r.st===0){ s.sr
 function shuf(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function prep(b){ const ms=Array.isArray(b.a); const ix=shuf(b.o.map((_,i)=>i)); if(b.o.length===2||b.type==='tf') ix.sort((x,y)=>x-y); return {b, ix, ms, a:ms?b.a.map(x=>ix.indexOf(x)).sort((x,y)=>x-y):ix.indexOf(b.a)}; }
 function el(h){ root.innerHTML=h; window.scrollTo(0,0); }
-const NAMES={poetry:'الشعر',intensive:'المنهج النقدي',analysis:'تحليل القصائد',grammar:'القواعد',all:'كل الأسئلة',myth:'الأساطير',history:'تاريخ الشعر'};
+const NAMES={tefl:'TEFL',tefl2:'TEFL',poetry:'الشعر',intensive:'المنهج النقدي',analysis:'تحليل القصائد',grammar:'القواعد',all:'كل الأسئلة',myth:'الأساطير',history:'تاريخ الشعر'};
 let sfxOn=function(k){ };
 function tone(f,t,d){ try{ const c=new (window.AudioContext||window.webkitAudioContext)(), o=c.createOscillator(), g=c.createGain(); o.type='triangle'; o.frequency.value=f; g.gain.value=.12; o.connect(g); g.connect(c.destination); o.start(c.currentTime+t); o.stop(c.currentTime+t+d); }catch(e){} }
 const snd={right(){ if(window.CHIP) CHIP.right(); }, wrong(){ if(window.CHIP) CHIP.wrong(); }};
@@ -61,7 +62,7 @@ function exam(set,pool,full){ const n=full?pool.length:Math.min(20,pool.length),
   show(); }
 function practiceList(k){ const d=due(), inP=d.filter(b=>k==='all'||b.c===k), ids={}; inP.forEach(b=>ids[b.id]=1); return shuf(inP).concat(shuf(pool(k)).filter(b=>!ids[b.id])); }
 function pool(set){ return set==='all'?BANK:BANK.filter(b=>b.c===set); }
-function examHome(){ const s=S(); const sets=['poetry','intensive','analysis','grammar','all'];
+function examHome(){ const s=S(); const sets=SITE.sets;
   let h='<div class="lesson-head"><div class="emoji"><span class="em">📝</span></div><h1>الامتحانات</h1><p style="color:var(--ink-soft)">تدريب بتصحيح فوري وشرح لكل إجابة، أو امتحان تجريبي بوقت. نتيجتك بتتحفظ.</p></div>';
   sets.forEach(k=>{ const n=pool(k).length, r=s.exams[k]; const en=Math.min(20,n);
     h+='<div class="plan-card" style="margin-bottom:14px"><h2 style="margin:0 0 6px">'+NAMES[k]+'</h2><p style="color:#666;margin:0 0 12px">'+n+' سؤال'+(r?' · آخر نتيجة '+r.last+'% · أفضل '+r.best+'%':'')+'</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="pl-next" style="flex:1;min-width:140px" data-m="p" data-k="'+k+'">تدريب</button><button class="pl-next" style="flex:1;min-width:140px;background:#1cb0f6;box-shadow:0 6px 0 #1899d6" data-m="e" data-k="'+k+'">امتحان تجريبي · '+en+' سؤال · '+Math.round(en*45/60)+' دقيقة</button></div></div>'; });
