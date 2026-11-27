@@ -177,7 +177,6 @@ function render(){
     else { try{confetti()}catch(e){} setTimeout(()=>sfx('done'),50); }
   }
   refreshHeader();
-  if(!document.getElementById('plver')){ const v=document.createElement('div'); v.id='plver'; v.style.cssText='text-align:center;color:#bbb;font-size:12px;margin-top:6px;direction:ltr'; v.textContent='player v9 · audio '+(M.audio&&Object.keys(M.audio).length?Object.keys(M.audio).length+' clips (mp3)':'none'); root.appendChild(v); } else { const v=document.getElementById('plver'); root.appendChild(v); }
 }
 function go(d){ if(idx+d<0||idx+d>=S.length) return; idx+=d; render(); const t=document.getElementById('plc'); if(t) window.scrollTo({top:Math.max(0,t.getBoundingClientRect().top+scrollY-90)}); }
 render();
