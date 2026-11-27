@@ -61,3 +61,14 @@ How the "آداب اللغة الإنجليزية" site is built, so another cou
 - Plain book or author citations are allowed.
 - No tutor or "ask the teacher" section.
 - Big fonts, large touch targets, Duolingo-style cards, installable PWA.
+
+## 9. The owner's standing requests (keep this list current; add every new request here)
+1. **English line under the Arabic**: every learn card carries an English version in the `en` field. It stays hidden on the live player until the owner approves it.
+2. **No source links, no site names, no image phrases**: lessons never show URLs, source-site names, "image suggestions" or production notes. Plain author and work citations are fine.
+3. **Essays are comparison essays only** (two eras, schools, styles, poets or works), in every track: poetry, history, myth, grammar, critical approaches. Each one has a model answer. The model answer appears right under the question only AFTER the student submits their own answer. A write card without a model answer is never published.
+4. **Microphone on the answer box**: one button dictates into the box (Arabic or English, browser speech recognition; needs internet on Android Chrome), one button records the voice and keeps it on the device with replay. Nothing is sent to the site's own servers.
+5. **Wrong answers are reviewable at once**: a wrong answer goes into the review pool immediately, repeats until answered right, and only then follows the spaced intervals (7 days, then done). The "train on questions" button includes the due-now ones first.
+6. **Separate reference tabs**: glossary, grammar glossary and abbreviations are separate pages, gated until the owner approves.
+7. **Offline card**: the "downloaded lessons" section lets the student keep a lesson offline.
+8. **Sounds toggle**: global sound switch for taps, right, wrong and done. Gated until approved.
+9. Every change the owner asks for is also written here and in the hosted playbook File.
