@@ -42,7 +42,7 @@ F.append({'t':'end','h':'','teaser':wrap(D.END),'extra':''})
 for i,s in enumerate(F): s['i']=i
 js=json.dumps(F,ensure_ascii=False).replace('</','<\\/')
 H=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'lesson_template.html'),encoding='utf-8').read()
-H=re.sub(r'<title>.*?</title>',f'<title>{html.escape(TITLE)} | آداب اللغة الإنجليزية</title>',H,count=1)
+H=re.sub(r'<title>.*?</title>',f'<title>{html.escape(TITLE)} | آداب إنجليزي: شعر وأساطير وقواعد</title>',H,count=1)
 H=re.sub(r'<h1>.*?</h1>',f'<h1>{html.escape(TITLE)}</h1>',H,count=1)
 H=re.sub(r'<div class="tags">.*?</div>',f'<div class="tags"><span class="tag"><span class="em">📊</span> تمهيدي</span><span class="tag">الدرس {N}</span><span class="tag"><span class="em">📜</span> تاريخ الشعر</span></div>',H,count=1,flags=re.S)
 H=H.replace('history-12',LID)

@@ -32,7 +32,7 @@ def build(lid,H,root):
     i=H.find('window.STEPS=');j=H.find(';</script>',i);S=[x for x in json.loads(H[i+13:j]) if not x.get('hide')]
     title=html.unescape(re.search(r'<h1>(.*?)</h1>',H,re.S).group(1))
     title=re.sub(r'<[^>]+>','',title)
-    out=[f'<div class="brand">آداب اللغة الإنجليزية</div><h1>{html.escape(EMO.sub("",title)).strip()}</h1>']
+    out=[f'<div class="brand">آداب إنجليزي: شعر وأساطير وقواعد</div><h1>{html.escape(EMO.sub("",title)).strip()}</h1>']
     key=[];qn=0;end=None;ABC='أبجدهـ'
     for s in S:
         t=s['t']

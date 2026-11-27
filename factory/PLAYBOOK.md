@@ -1,6 +1,6 @@
 # Site factory playbook: an Arabic-first lesson site (cards, audio, PDF, quiz)
 
-How the "آداب اللغة الإنجليزية" site is built, so another course site can be made the same way. Static site, GitHub Pages, no backend. Run every script from the site root. Templates are in `factory/templates/`.
+How the "آداب إنجليزي: شعر وأساطير وقواعد" site is built, so another course site can be made the same way. Static site, GitHub Pages, no backend. Run every script from the site root. Templates are in `factory/templates/`.
 
 ## 1. Inputs per lesson
 - Lesson text (Arabic, with English terms), already fact-checked. Plain book or author citations are fine. No site names, no URLs, no production wording (no "source", "draft", "agent", "generated").
@@ -74,3 +74,4 @@ How the "آداب اللغة الإنجليزية" site is built, so another cou
 9. Every change the owner asks for is also written here and in the hosted playbook File.
 10. **No lesson publishes without its standard question set**: at least 4 multiple-choice or true/false questions placed INSIDE the lesson body, right after the card they test (not only in a closing exam block), plus recall and write cards at the end. Analysis, grammar, history, myth, poetry and intensive lessons are all checked with a per-lesson count (MC, TF, recall, write, and how many sit before the last learn card) before the push. A lesson with zero in-body questions is not published.
 11. **Two separate glossary tabs**: poetry terms (glossary.html) and grammar terms (grammar-glossary.html) are two separate entries on the home page, each opening only its own page. No terms from one appear on the other and the pages do not link to each other.
+12. **App name**: the in-app display name and the PWA manifest name are "آداب إنجليزي: شعر وأساطير وقواعد" (short name "آداب إنجليزي"), approved by the owner. Indexing and SEO tags stay off on the live site until the owner approves them.

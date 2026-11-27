@@ -1,7 +1,7 @@
 # usage: seo.py <root> <base_url> [noindex]   idempotent: strips its own block (<!--seo-->...<!--/seo-->) and rewrites
 import re,sys,glob,os,json,html,datetime
 R,BASE=sys.argv[1],sys.argv[2].rstrip('/')+'/'; NOIDX=len(sys.argv)>3
-NAME='آداب اللغة الإنجليزية'
+NAME='آداب إنجليزي: شعر وأساطير وقواعد'
 KW_AR='الأدب الإنجليزي, الشعر الإنجليزي, تاريخ الشعر الإنجليزي, قواعد اللغة الإنجليزية, تعلم الإنجليزية من الصفر, كلية الآداب قسم اللغة الإنجليزية, ميثولوجيا, تحليل القصائد, النقد الأدبي'
 KW_EN='English literature, English poetry, history of English poetry, English grammar, learn English poetry, poetry analysis, mythology in poetry, literary criticism'
 PAGES={

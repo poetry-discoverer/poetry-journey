@@ -23,7 +23,7 @@ def title(i):
     h=open(f'{R}/lessons/{i}.html',encoding='utf-8').read(); return re.search(r'<h1>(.*?)</h1>',h,re.S).group(1)
 T=open(R+'/track-analysis.html',encoding='utf-8').read()
 nodes=''.join(f'<div class="node-row fade">\n<a class="node" data-id="{i}" href="lessons/{i}.html"><span class="em">🧩</span></a>\n<div class="node-label">{title(i)}<small>من الصفر</small></div>\n</div>\n' for i in ids)
-T=re.sub(r'<title>.*?</title>','<title>كورس القواعد | آداب اللغة الإنجليزية</title>',T)
+T=re.sub(r'<title>.*?</title>','<title>كورس القواعد | آداب إنجليزي: شعر وأساطير وقواعد</title>',T)
 T=re.sub(r'<div class="lesson-head fade">.*?</div>\n<div class="overall',f'<div class="lesson-head fade"><div class="emoji"><span class="em">🧩</span></div><h1>كورس القواعد (Grammar)</h1>\n<p style="color:var(--ink-soft)">القواعد من الصفر: إزاي اللغة بتشتغل، وبعدين كل عنصر بشكله ووظيفته ومعناه واستخدامه. كل درس بصوته وPDF وأسئلة.</p>\n<div class="tags"><span class="tag">{len(ids)} درس حتى الآن</span></div></div>\n<div class="overall',T,count=1,flags=re.S)
 T=re.sub(r'data-overall="[^"]*"','data-overall="'+','.join(ids)+'"',T)
 T=re.sub(r'<div class="path">.*?</div>\n</main>','<div class="path">'+nodes+'</div>\n</main>',T,count=1,flags=re.S)
