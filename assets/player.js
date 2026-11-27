@@ -4,7 +4,9 @@ const S=window.STEPS, LID=window.LESSON_ID, M=window.AUDIO_MANIFEST||{audio:{},p
 function st(){ const s=state(); s.steps=s.steps||{}; s.sx=s.sx||{}; s.combo=s.combo||0; return s; }
 function sv(s){ save(s); refreshHeader(); }
 let idx=Math.min((st().steps[LID]||0),S.length-1); if(idx>=S.length-1) idx=0; // finished lessons restart
-let gained=0, back=false;
+let gained=0, back=false, missed=[], reviewed=false;
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function burst(el){ if(RM||!el) return; const r=el.getBoundingClientRect(); const cols=['#58cc02','#1cb0f6','#ffc800','#ff4b4b','#ce82ff']; for(let i=0;i<16;i++){ const p=document.createElement('i'); p.className='pl-cf'; p.style.left=(r.left+r.width/2)+'px'; p.style.top=(r.top+r.height/2+scrollY)+'px'; p.style.background=cols[i%5]; const a=Math.random()*Math.PI*2, d=50+Math.random()*70; p.style.setProperty('--dx',Math.cos(a)*d+'px'); p.style.setProperty('--dy',(Math.sin(a)*d-30)+'px'); document.body.appendChild(p); setTimeout(()=>p.remove(),1000); } }
 function xp(n,label){ const s=st(); s.xp+=n; gained+=n; sv(s); sfx('xp'); const d=document.createElement('div'); d.className='pl-xp'; d.textContent='+'+n+(label?' '+label:''); document.body.appendChild(d); setTimeout(()=>d.remove(),1150); }
 function once(k,n,label){ const s=st(); if(s.sx[k]) return; s.sx[k]=1; sv(s); xp(n,label); }
 // ---- sound: shared <audio> element (unlocked by the first tap) + WebAudio sfx
@@ -79,8 +81,32 @@ function wireAudio(card,id){
   let n=0; for(let j=idx+1;j<S.length&&n<2;j++){ if(hasClip(S[j].a)){ if(!/^data:/.test(M.audio[S[j].a])){ const p=new Audio(clipUrl(S[j].a)); p.preload='auto'; } else clipUrl(S[j].a); n++; } }
 }
 function esc(t){ return t; }
+
+function review(){
+  stopAudio(); const queue=missed.slice(); let qi=0;
+  function one(){
+    if(qi>=queue.length){ reviewed=true; missed=[]; sfx('done'); render(); scrollTo(0,0); return; }
+    const o=queue[qi]; let opts, ans;
+    if(o.t==='tf'){ opts=['صح ✅','غلط ❌']; ans=o.ans?0:1; }
+    else { const idxs=o.opts.map((_,i)=>i); for(let i=idxs.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [idxs[i],idxs[j]]=[idxs[j],idxs[i]]; } opts=idxs.map(i=>o.opts[i]); ans=idxs.indexOf(o.ans); }
+    let h='<div class="pl-top"><div class="pl-bar"><i style="width:'+Math.round(qi/queue.length*100)+'%"></i></div><div class="pl-count">'+(qi+1)+' / '+queue.length+'</div></div>';
+    h+='<div class="pl-card" id="plc"><div class="big">🔁</div><h2 style="margin:0 0 6px">مراجعة الأخطاء</h2><div class="pl-hint" style="color:#777;margin-bottom:10px">الأسئلة اللي غلطت فيها، حلّها صح قبل ما تخلّص.</div><div class="pl-q">'+o.q+'</div>';
+    opts.forEach((t,k)=>{ h+='<button class="pl-opt" data-k="'+k+'">'+t+'</button>'; });
+    h+='<div id="plfb"></div></div>';
+    root.innerHTML=h;
+    root.querySelectorAll('.pl-opt').forEach(b=>b.onclick=()=>{
+      const k=+b.dataset.k, fb=document.getElementById('plfb'); unlocked=true; ac();
+      if(k===ans){ b.classList.add('right'); sfx('right'); burst(b); const q=st(); const key=LID+':rv:'+S.indexOf(o); if(!q.sx[key]){ q.sx[key]=1; save(q); xp(3); }
+        fb.innerHTML='<div class="pl-fb ok">✅ صح! '+(o.why?'<div style="font-size:17px;font-weight:600;margin-top:4px">'+o.why+'</div>':'')+'<button class="pl-next" id="plgo">كمّل</button></div>';
+        document.getElementById('plgo').onclick=()=>{ sfx('click'); qi++; one(); scrollTo(0,0); };
+      } else { sfx('wrong'); b.classList.add('wrong'); fb.innerHTML='<div class="pl-fb no">❌ لأ، جرّب تاني</div>'; setTimeout(()=>{b.classList.remove('wrong');b.style.opacity=.45;b.disabled=true;},420); }
+    });
+  }
+  one(); scrollTo(0,0);
+}
 function render(){
   stopAudio();
+  if(S[idx].t==='end'&&missed.length&&!reviewed){ review(); return; }
   const s=S[idx]; const pct=Math.round(idx/(S.length-1)*100);
   const st0=st(); st0.steps[LID]=idx; save(st0);
   let h='<div class="pl-top"><div class="pl-bar"><i style="width:'+pct+'%"></i></div><div class="pl-count">'+(idx+1)+' / '+S.length+'</div><button class="pl-mute" id="plmute" aria-label="الصوت">'+(soundOn()?'🔊':'🔇')+'</button></div>';
@@ -95,7 +121,7 @@ function render(){
     h+='<div id="plfb"></div>';
   }
   else if(s.t==='recall'){ h+='<div class="pl-q">'+s.q+'</div><div class="pl-hint" style="color:#777;margin-bottom:10px">فكّر في إجابتك الأول، وبعدين اضغط.</div><button class="pl-next" id="plshow" style="background:#1cb0f6;box-shadow:0 6px 0 #1899d6">شوف الإجابة</button><div id="plfb"></div>'; }
-  else if(s.t==='write'){ h+='<div class="pl-q">'+s.q+'</div><textarea class="pl-write" id="plw" placeholder="اكتب إجابتك هنا… بتتحفظ عندك"></textarea>'+nxt; }
+  else if(s.t==='write'){ h+='<div class="pl-q">'+s.q+'</div><textarea class="pl-write" id="plw" placeholder="اكتب إجابتك هنا (جملتين أو تلاتة)… بتتحفظ عندك"></textarea>'+(s.a?'<div id="plmodel"></div><button class="pl-next" id="plsub" style="background:#1cb0f6;box-shadow:0 6px 0 #1899d6">سلّم إجابتي وقارنها</button>':'')+'<div class="pl-nav"'+(s.a?' style="display:none" id="plnavw"':'')+'>'+(idx>0?'<button class="pl-back" aria-label="رجوع">→</button>':'')+'<button class="pl-next" id="plnext">التالي</button></div>'; }
   else if(s.t==='end'){
     const pdf=M.pdf&&M.pdf[LID];
     h+='<div class="big">🏆</div><h2>برافو! خلصت الدرس</h2><div class="xps">⭐ كسبت '+gained+' نقطة في الدرس ده</div>';
@@ -113,10 +139,10 @@ function render(){
   const bk=card.querySelector('.pl-back'); if(bk) bk.onclick=()=>{ unlocked=true; sfx('click'); if(idx>0){ idx--; back=true; render(); scrollTo(0,0);} };
   const nb=document.getElementById('plnext');
   if(nb) nb.onclick=()=>{ unlocked=true; ac(); sfx('click');
-    if(s.t==='learn') once(LID+':'+idx,2);
-    if(s.t==='write'){ const v=document.getElementById('plw').value; const q=st(); q.answers=q.answers||{}; q.answers[s.key]=v; save(q); if(v.trim()) once(LID+':'+idx,3,'كتبت!'); }
+    if(s.t==='write'){ const v=document.getElementById('plw').value; const q=st(); q.answers=q.answers||{}; q.answers[s.key]=v; save(q); if(v.trim()){ const wc=v.trim().split(/\s+/).length; once(LID+':'+idx,wc>=15?10:3,wc>=15?'كتبت!':''); } }
     go(1);
   };
+  if(s.t==='write'&&s.a){ document.getElementById('plsub').onclick=()=>{ unlocked=true; sfx('click'); const w=document.getElementById('plw'); const v=w.value.trim(); if(!v){ w.focus(); return; } const q=st(); q.answers=q.answers||{}; q.answers[s.key]=w.value; save(q); const wc=v.split(/\s+/).length; once(LID+':'+idx,wc>=15?10:3,wc>=15?'كتبت!':''); if(wc<15){ const n=document.createElement('div'); n.className='pl-hint'; n.style.cssText='color:#777;margin:8px 0'; n.textContent='جرّب تكتب أكتر من كده المرة الجاية (١٥ كلمة أو أكتر تديك نقاط أكتر).'; document.getElementById('plmodel').appendChild(n); } document.getElementById('plmodel').insertAdjacentHTML('afterbegin','<div class="pl-fb info"><div style="font-size:17px;font-weight:600">إجابة نموذجية للمقارنة:</div>'+s.a+'</div>'); document.getElementById('plsub').remove(); const nv=document.getElementById('plnavw'); if(nv) nv.style.display=''; }; }
   if(s.t==='write'){ const q=st(); const w=document.getElementById('plw'); if(q.answers&&q.answers[s.key]) w.value=q.answers[s.key]; }
   if(s.t==='mc'||s.t==='tf'){
     let tries=0, done=false;
@@ -125,10 +151,10 @@ function render(){
       const ok=s.t==='tf'? ((k===0)===s.ans) : (k===s.ans);
       const fb=document.getElementById('plfb');
       unlocked=true; ac(); if(ok){ done=true; b.classList.add('right'); const q=st(); q.combo=(q.combo||0)+1; save(q); if(q.combo>=3&&tries===0) sfx('combo',q.combo); else sfx('right');
-        const pts=tries===0?5:2; if(!q.sx[LID+':'+idx]){ q.sx[LID+':'+idx]=1; save(q); xp(pts+(q.combo>=3&&tries===0?2:0), tries===0&&q.combo>=3?'🔥':''); }
+        burst(b); const pts=tries===0?10:4; if(!q.sx[LID+':'+idx]){ q.sx[LID+':'+idx]=1; save(q); xp(pts, tries===0&&q.combo>=3?'🔥':''); }
         fb.innerHTML='<div class="pl-fb ok">✅ صح! '+(s.why?'<div style="font-size:17px;font-weight:600;margin-top:4px">'+s.why+'</div>':'')+'<button class="pl-next" id="plgo">كمّل</button></div>';
         document.getElementById('plgo').onclick=()=>{ sfx('click'); go(1); };
-      } else { sfx('wrong'); tries++; b.classList.add('wrong'); const q=st(); q.combo=0; save(q); fb.innerHTML='<div class="pl-fb no">❌ لأ، جرّب تاني</div>'; setTimeout(()=>{b.classList.remove('wrong');b.style.opacity=.45;b.disabled=true;},420); }
+      } else { sfx('wrong'); tries++; if(missed.indexOf(s)<0) missed.push(s); b.classList.add('wrong'); const q=st(); q.combo=0; save(q); fb.innerHTML='<div class="pl-fb no">❌ لأ، جرّب تاني</div>'; setTimeout(()=>{b.classList.remove('wrong');b.style.opacity=.45;b.disabled=true;},420); }
     });
   }
   if(s.t==='recall'){
@@ -140,13 +166,13 @@ function render(){
     };
   }
   if(s.t==='end'){
-    document.getElementById('plrest').onclick=()=>{ unlocked=true; sfx('click'); idx=0; gained=0; render(); scrollTo(0,0); };
+    document.getElementById('plrest').onclick=()=>{ unlocked=true; sfx('click'); idx=0; gained=0; missed=[]; reviewed=false; render(); scrollTo(0,0); };
     document.getElementById('plfin').onclick=()=>{ sfx('done'); const q=st(); if(!q.done[LID]){ q.done[LID]=Date.now(); q.xp+=20; save(q); xp(20,'🎉'); } else sv(q); const b=document.getElementById('plfin'); b.textContent='✅ الدرس متكمل'; b.disabled=true; confetti(); };
     if(st().done[LID]){ const b=document.getElementById('plfin'); b.textContent='✅ الدرس متكمل'; b.disabled=true; }
     else { try{confetti()}catch(e){} setTimeout(()=>sfx('done'),50); }
   }
   refreshHeader();
-  if(!document.getElementById('plver')){ const v=document.createElement('div'); v.id='plver'; v.style.cssText='text-align:center;color:#bbb;font-size:12px;margin-top:6px;direction:ltr'; v.textContent='player v7 · audio '+(M.audio&&Object.keys(M.audio).length?Object.keys(M.audio).length+' clips (mp3)':'none'); root.appendChild(v); } else { const v=document.getElementById('plver'); root.appendChild(v); }
+  if(!document.getElementById('plver')){ const v=document.createElement('div'); v.id='plver'; v.style.cssText='text-align:center;color:#bbb;font-size:12px;margin-top:6px;direction:ltr'; v.textContent='player v8 · audio '+(M.audio&&Object.keys(M.audio).length?Object.keys(M.audio).length+' clips (mp3)':'none'); root.appendChild(v); } else { const v=document.getElementById('plver'); root.appendChild(v); }
 }
 function go(d){ if(idx+d<0||idx+d>=S.length) return; idx+=d; render(); const t=document.getElementById('plc'); if(t) window.scrollTo({top:Math.max(0,t.getBoundingClientRect().top+scrollY-90)}); }
 render();
