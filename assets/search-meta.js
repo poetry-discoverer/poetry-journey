@@ -1,1 +1,1 @@
-window.SEARCH_KEYS=["analysis", "grammar", "history", "intensive", "myth", "phrasal", "poetry", "verb"];
+window.SEARCH_KEYS=["analysis", "grammar", "history", "intensive", "myth", "phrasal", "poetry", "psy", "verb"];
