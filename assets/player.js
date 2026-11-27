@@ -4,6 +4,7 @@ const S=window.STEPS.filter(s=>!s.hide), LID=window.LESSON_ID, M=window.AUDIO_MA
 function st(){ const s=state(); s.steps=s.steps||{}; s.sx=s.sx||{}; s.combo=s.combo||0; return s; }
 function sv(s){ save(s); refreshHeader(); }
 let idx=Math.min((st().steps[LID]||0),S.length-1); if(idx>=S.length-1) idx=0; // finished lessons restart
+const QC=new URLSearchParams(location.search).get('card'); const PEEK=QC!==null&&/^\d+$/.test(QC); if(PEEK) idx=Math.min(+QC,S.length-1);
 let gained=0, back=false, missed=[], reviewed=false;
 const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function burst(el){ if(RM||!el) return; const r=el.getBoundingClientRect(); const cols=['#58cc02','#1cb0f6','#ffc800','#ff4b4b','#ce82ff']; for(let i=0;i<16;i++){ const p=document.createElement('i'); p.className='pl-cf'; p.style.left=(r.left+r.width/2)+'px'; p.style.top=(r.top+r.height/2+scrollY)+'px'; p.style.background=cols[i%5]; const a=Math.random()*Math.PI*2, d=50+Math.random()*70; p.style.setProperty('--dx',Math.cos(a)*d+'px'); p.style.setProperty('--dy',(Math.sin(a)*d-30)+'px'); document.body.appendChild(p); setTimeout(()=>p.remove(),1000); } }
@@ -108,7 +109,7 @@ function render(){
   stopAudio();
   if(S[idx].t==='end'&&missed.length&&!reviewed){ review(); return; }
   const s=S[idx]; const pct=Math.round(idx/(S.length-1)*100);
-  const st0=st(); st0.steps[LID]=idx; st0.last={id:LID,t:Date.now(),title:(document.querySelector('#lhead h1')||{}).textContent||LID}; save(st0);
+  const st0=st(); if(!PEEK) st0.steps[LID]=idx; if(!PEEK) st0.last={id:LID,t:Date.now(),title:(document.querySelector('#lhead h1')||{}).textContent||LID}; save(st0);
   let h='<div class="pl-top"><div class="pl-bar"><i style="width:'+pct+'%"></i></div><div class="pl-count">'+(idx+1)+' / '+S.length+'</div><button class="pl-mute" id="plmute" aria-label="الصوت">'+(soundOn()?'🔊':'🔇')+'</button></div>';
   h+='<div class="pl-card'+(back?' back':'')+(s.t==='section'?' pl-section':'')+(s.t==='end'?' pl-end':'')+'" id="plc">';
   const nxt='<div class="pl-nav">'+(idx>0&&s.t!=='end'?'<button class="pl-back" aria-label="رجوع">→</button>':'')+'<button class="pl-next" id="plnext">التالي</button></div>';
@@ -196,4 +197,17 @@ render();
       const q=st(); q.off=q.off||{}; q.off[LID]=tot; save(q); paint(); }
     catch(e){ b.disabled=false; b.textContent='⚠️ فشل التحميل. جرّب تاني وإنت على النت'; } };
   paint(); })();
+
+// ---- glossary: tap an English term to see its meaning and jump to the lesson that explains it
+(function(){ const G=window.GLOSSARY; if(!G) return; const map={}; G.forEach(e=>{ map[e.t]=e; });
+  const hostC=document.getElementById('player');
+  function norm(t){ t=t.trim().toLowerCase(); if(map[t]) return map[t]; if(t.endsWith('s')&&map[t.slice(0,-1)]) return map[t.slice(0,-1)]; if(t.endsWith('es')&&map[t.slice(0,-2)]) return map[t.slice(0,-2)]; return null; }
+  function sheet(e){ const old=document.getElementById('glsheet'); if(old) old.remove(); const here=(e.l===LID);
+    const d=document.createElement('div'); d.id='glsheet'; d.style.cssText='position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.35);display:flex;align-items:flex-end;justify-content:center';
+    d.innerHTML='<div style="background:#fff;width:100%;max-width:640px;border-radius:22px 22px 0 0;padding:20px 20px 24px;font-size:19px;line-height:1.8"><div style="font-weight:900;font-size:24px;direction:ltr;text-align:start">'+e.t+' <span style="font-size:18px;color:#777;direction:rtl">· '+e.a+'</span></div><div style="margin:8px 0 14px">'+e.d+'</div>'+(here?'':'<a class="pl-next" style="display:block;text-align:center;text-decoration:none" href="'+(location.pathname.replace(/[^\/]*$/,''))+e.l+'.html?card='+e.k+'">📖 شوف الشرح في الدرس</a>')+'<a href="'+(location.pathname.replace(/[^\/]*$/,''))+'../glossary.html" style="display:block;text-align:center;margin-top:12px;font-weight:900;color:#1cb0f6">كل المصطلحات</a></div>';
+    d.onclick=ev=>{ if(ev.target===d) d.remove(); }; document.body.appendChild(d); }
+  function mark(){ root.querySelectorAll('.en').forEach(sp=>{ if(sp.dataset.gl) return; const e=norm(sp.textContent); if(!e) return; sp.dataset.gl=1; sp.style.cssText+=';border-bottom:2px dotted #1cb0f6;cursor:pointer'; sp.addEventListener('click',ev=>{ ev.stopPropagation(); ev.preventDefault(); sheet(e); }); }); }
+  new MutationObserver(mark).observe(root,{childList:true,subtree:true}); mark();
+  if(PEEK&&hostC){ const b=document.createElement('a'); b.href='#'; b.textContent='→ رجوع للدرس اللي كنت فيه'; b.className='pdf-link'; b.style.cssText+=';display:block;text-align:center;margin:0 0 12px'; b.onclick=ev=>{ ev.preventDefault(); if(history.length>1) history.back(); else location.href='../index.html'; }; hostC.parentNode.insertBefore(b,hostC); }
+})();
 })();
