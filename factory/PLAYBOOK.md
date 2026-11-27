@@ -107,3 +107,4 @@ How the "آداب الإنجليزية: قواعد وجرامر وشعر وأس�
 42. **Exam headings** read "على نمط امتحانات الكلية".
 43. **Publishing**: GitHub Pages allows about 10 builds per hour, so batch several changes per push; a new page can 404 for 2-3 minutes after a push, always curl-check with `?z=$RANDOM` before reporting a link.
 44. **New lessons (this run)**: poetry-23/24 via pbuild.py (template poetry-22), history-31, myth-m23 (markdown text matched 1:1 to voice chunks), c2-13, Learn TEFL tefl-59..64 built from txt+CSV (cards 1:1), cumulative glossary 576 terms; true/false feedback order fixed in older Learn TEFL lessons.
+45. **New lessons (second batch)**: history-32/33/34, myth-m24, grammar-c2-14, poetry-25 (poetry counter tag now "من 25"). Phrasal-verbs home section below irregular verbs; search split into per-track shards (`search-meta.js`); translator credit line removed from myth-m22/23/24; swapped true/false feedback fixed in 33 old Learn TEFL questions.
