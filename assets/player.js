@@ -1,6 +1,6 @@
 (function(){
 const root=document.getElementById('player'); if(!root||!window.STEPS) return;
-const S=window.STEPS, LID=window.LESSON_ID, M=window.AUDIO_MANIFEST||{audio:{},pdf:{}};
+const S=window.STEPS.filter(s=>!s.hide), LID=window.LESSON_ID, M=window.AUDIO_MANIFEST||{audio:{},pdf:{}};
 function st(){ const s=state(); s.steps=s.steps||{}; s.sx=s.sx||{}; s.combo=s.combo||0; return s; }
 function sv(s){ save(s); refreshHeader(); }
 let idx=Math.min((st().steps[LID]||0),S.length-1); if(idx>=S.length-1) idx=0; // finished lessons restart
@@ -108,7 +108,7 @@ function render(){
   stopAudio();
   if(S[idx].t==='end'&&missed.length&&!reviewed){ review(); return; }
   const s=S[idx]; const pct=Math.round(idx/(S.length-1)*100);
-  const st0=st(); st0.steps[LID]=idx; save(st0);
+  const st0=st(); st0.steps[LID]=idx; st0.last={id:LID,t:Date.now(),title:(document.querySelector('#lhead h1')||{}).textContent||LID}; save(st0);
   let h='<div class="pl-top"><div class="pl-bar"><i style="width:'+pct+'%"></i></div><div class="pl-count">'+(idx+1)+' / '+S.length+'</div><button class="pl-mute" id="plmute" aria-label="الصوت">'+(soundOn()?'🔊':'🔇')+'</button></div>';
   h+='<div class="pl-card'+(back?' back':'')+(s.t==='section'?' pl-section':'')+(s.t==='end'?' pl-end':'')+'" id="plc">';
   const nxt='<div class="pl-nav">'+(idx>0&&s.t!=='end'?'<button class="pl-back" aria-label="رجوع">→</button>':'')+'<button class="pl-next" id="plnext">التالي</button></div>';
@@ -180,4 +180,20 @@ function render(){
 }
 function go(d){ if(idx+d<0||idx+d>=S.length) return; idx+=d; render(); const t=document.getElementById('plc'); if(t) window.scrollTo({top:Math.max(0,t.getBoundingClientRect().top+scrollY-90)}); }
 render();
+
+// ---- offline download for this lesson
+(function(){ if(!('caches' in window)) return; const head=document.getElementById('lhead'); if(!head) return;
+  const CN='poetry-offline';
+  const urls=()=>{ const u=[location.pathname]; const pdf=M.pdf&&M.pdf[LID]; if(pdf) u.push(new URL('../pdf/'+pdf,location.href).pathname);
+    S.forEach(x=>{ if(x.a&&M.audio&&M.audio[x.a]&&!/^data:/.test(M.audio[x.a])) u.push(new URL('../audio/'+M.audio[x.a],location.href).pathname); });
+    return Array.from(new Set(u)); };
+  const b=document.createElement('button'); b.className='pdf-link'; b.style.cssText='cursor:pointer;font-family:inherit;font-size:inherit;margin-inline-start:8px'; head.appendChild(b);
+  const fmt=n=>(n/1048576).toFixed(1)+' MB';
+  async function paint(){ const q=st(); const o=q.off&&q.off[LID]; b.disabled=false; b.textContent=o?'✅ متحمّل للأوفلاين ('+fmt(o)+') · اضغط للحذف':'⬇️ حمّل الدرس للأوفلاين'; }
+  b.onclick=async()=>{ const q0=st(); if(q0.off&&q0.off[LID]){ const c=await caches.open(CN); for(const u of urls()) await c.delete(u); delete q0.off[LID]; save(q0); return paint(); }
+    b.disabled=true; const c=await caches.open(CN); const L=urls(); let tot=0, i=0;
+    try{ for(const u of L){ const r=await fetch(u,{cache:'reload'}); if(!r.ok) throw new Error(u); const bl=await r.clone().blob(); tot+=bl.size; await c.put(u,r); i++; b.textContent='⏳ بيتحمّل '+i+' / '+L.length; }
+      const q=st(); q.off=q.off||{}; q.off[LID]=tot; save(q); paint(); }
+    catch(e){ b.disabled=false; b.textContent='⚠️ فشل التحميل. جرّب تاني وإنت على النت'; } };
+  paint(); })();
 })();
