@@ -205,3 +205,13 @@ a,a:visited,a:hover,a:focus{color:#0b6fa8}
 .node.locked,.node.locked *{color:#595959}
 .node{color:#595959}.node.done,.node.current{color:#fff}.node.current{color:#2b1f00}
 .pl-play{background:#0b6fa8!important}
+
+/* 360px fixes: title on its own line, controls row below; pdf buttons fit and wrap */
+@media(max-width:560px){
+ .topbar .wrap{flex-wrap:wrap;row-gap:6px}
+ .topbar .logo{flex:1 1 100%;order:0;font-size:1.05rem;line-height:1.35;white-space:normal;align-items:center}
+ .topbar .stats{flex:1 1 100%;order:1;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-start}
+ .topbar .wrap>*:not(.logo):not(.stats){order:2}
+}
+.pdf-link,.pdf-link.course-pdf{max-width:100%;box-sizing:border-box;white-space:normal;text-align:center;overflow-wrap:anywhere;line-height:1.5}
+.hero,.hero>*{min-width:0}
