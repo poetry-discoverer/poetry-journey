@@ -258,7 +258,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 /* pronunciation tab for verb lessons: UK|US toggle, per-lesson (all 5) and per-verb clips; clip ids L01-all5-uk, L01V1-f0-uk (looked up in AUDIO_MANIFEST.audio); 'soon' state until the clip exists */
 (function(){try{var id=window.LESSON_ID||'';var m=/^verb-(\d+)$/.exec(id);if(!m||!window.STEPS)return;var n=('0'+parseInt(m[1],10)).slice(-2);var K='poetry-pron-acc';var acc=localStorage.getItem(K)||'uk';
-function go(){var p=document.getElementById('player');if(!p||document.getElementById('pron'))return;var M=window.AUDIO_MANIFEST||{audio:{}};var A=M.audio||{};
+function go(){var p=document.getElementById('player');if(!p||document.getElementById('pron'))return;var M=window.AUDIO_MANIFEST||{audio:{}};var A=M.audio||{};if(window.STEPS.some(function(x){return x.a&&A[x.a]}))return;
 var verbs=window.STEPS.filter(function(s){return s.t==='section'&&/الفعل/.test(s.h||'')}).map(function(s){return (s.h||'').replace(/<[^>]+>/g,'').replace('الفعل','').trim()});
 var d=document.createElement('details');d.id='pron';d.style.cssText='margin:12px 0;padding:12px 14px;border:2px solid #e5e5e5;border-radius:16px;background:#fff';
 var au=new Audio();
