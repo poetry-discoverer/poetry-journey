@@ -274,7 +274,7 @@ function fanfare(){if(played)return;try{var AC=window.AudioContext||window.webki
 [523.25,659.25,783.99].forEach(function(f){tone(f,t+.5,1.3,'sawtooth',.05)});
 var n=ac.sampleRate*.25,b=ac.createBuffer(1,n,ac.sampleRate),dd=b.getChannelData(0);for(var i=0;i<n;i++)dd[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);var s=ac.createBufferSource(),g=ac.createGain();s.buffer=b;g.gain.value=.25;s.connect(g);g.connect(ac.destination);s.start(t+.5)}catch(e){}}
 function celebrate(){var x=W/2;burst(x,H*.3,120,9);setTimeout(function(){burst(W*.2,H*.45,60,8);burst(W*.8,H*.45,60,8)},250)}
-var vs=['basmala.mp3','welcome-2.mp3','welcome-3.mp3'].map(function(n){var a=new Audio(base+n);a.preload='auto';return a}),started=false,finished=false,sk=d.querySelector('.sk');
+var vs=['basmala.mp3','salawat.mp3','welcome-2.mp3','welcome-3.mp3'].map(function(n){var a=new Audio(base+n);a.preload='auto';a.__nc=1;return a}),started=false,finished=false,sk=d.querySelector('.sk');
 function stopVoice(){vs.forEach(function(a,i){if(i===0)return;try{a.pause()}catch(e){}})}
 function close(){if(!d.parentNode)return;alive=false;stopVoice();cancelAnimationFrame(raf);d.classList.add('out');setTimeout(function(){d.remove();st.remove();try{ac&&ac.close()}catch(e){}},600)}
 function chain(i){if(!alive)return;if(i>=vs.length){finished=true;if(!rm)celebrate();fanfare();setTimeout(close,3500);return}var a=vs[i];a.onended=function(){setTimeout(function(){chain(i+1)},350)};a.play().catch(function(){chain(i+1)})}
@@ -298,7 +298,7 @@ function credit(){var f=document.querySelector('.footer');if(!f||f.querySelector
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',credit);else credit();
 if(!/(\/|index\.html|offline\.html|studied\.html|progress\.html|review\.html|exam\.html|exams\.html|glossary\.html|track-[^\/]*\.html|module[^\/]*\.html|lessons\/[^\/]*\.html)$/.test(p))return;
 var EV=['pointerdown','touchstart','keydown','click'];
-function run(){if(window.__wlcSplash)return;var a=new Audio(base+'basmala.mp3');a.preload='auto';var done=false;if(/track-|module|\/lessons\//.test(p)){a.addEventListener('ended',function(){try{var s=new Audio(base+'salawat.mp3');var q=s.play();if(q&&q.catch)q.catch(function(){})}catch(e){}})}
+function run(){if(window.__wlcSplash)return;var a=new Audio(base+'basmala.mp3');a.preload='auto';var done=false;
 function off(){done=true;EV.forEach(function(t){document.removeEventListener(t,go,true)})}
 function go(){if(done)return;var q;try{q=a.play()}catch(e){off();return}if(q&&q.then)q.then(off).catch(function(){});else off()}
 function arm(){EV.forEach(function(t){document.addEventListener(t,go,true)})}
@@ -379,7 +379,10 @@ else document.addEventListener('click',function(e){try{var l=e.target&&e.target.
 (function(){try{var P=HTMLMediaElement.prototype,op=P.play,cur=null;
 P.play=function(){try{var s=this.currentSrc||this.src||'';if(/\/(basmala|salawat|alhamdulillah)\.mp3/.test(s)){
 if(cur&&cur!==this&&!cur.ended&&!cur.paused&&cur.currentTime>0){return Promise.resolve()}
-cur=this}}catch(e){}return op.apply(this,arguments)}}catch(e){}})();
+var nm=(s.match(/\/(basmala|salawat|alhamdulillah)\.mp3/)||[])[1],L=window.__lastClip;
+if(nm==='alhamdulillah'&&L&&(L.n==='basmala'||L.n==='salawat')&&Date.now()-L.t<8000){return Promise.resolve()}
+window.__lastClip={n:nm,t:Date.now()};if(!this.__lt){this.__lt=1;this.addEventListener('ended',function(){window.__lastClip={n:nm,t:Date.now()}})}
+cur=this;if(/\/(basmala|alhamdulillah)\.mp3/.test(s)&&!this.__ch&&!this.__nc){this.__ch=1;var base=s.replace(/[^\/]*$/,'');this.addEventListener('ended',function(){try{var z=new Audio(base+'salawat.mp3');var q=z.play();if(q&&q.catch)q.catch(function(){})}catch(e){}})}}}catch(e){}return op.apply(this,arguments)}}catch(e){}})();
 
 /* in-app exit button (home page): alhamdulillah through the queue, then close as the platform allows */
 (function(){try{
@@ -390,7 +393,7 @@ function mk(){var f=document.querySelector('.footer');if(!f||document.getElement
 var b=document.createElement('button');b.id='exitbtn';b.type='button';b.textContent='\u062E\u0631\u0648\u062C \uD83D\uDEAA';
 b.setAttribute('style','display:block;margin:12px auto 4px;padding:10px 26px;border-radius:14px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;cursor:pointer');
 b.addEventListener('click',function(){var done=false;function leave(){if(done)return;done=true;try{window.close()}catch(e){}setTimeout(function(){if(!window.closed){b.textContent='\u0627\u0642\u0641\u0644 \u0627\u0644\u062A\u0637\u0628\u064A\u0642 \u0645\u0646 \u0632\u0631\u0627\u0631 \u0627\u0644\u0647\u0648\u0645 \u0623\u0648 \u0627\u0644\u062A\u0627\u0628'}},400)}
-try{window.__lastClickGuard=1;var a=new Audio(base+'alhamdulillah.mp3');a.addEventListener('ended',leave);var q=a.play();if(q&&q.catch)q.catch(leave);setTimeout(leave,7000)}catch(e){leave()}});
+try{window.__lastClickGuard=1;var a=new Audio(base+'alhamdulillah.mp3');a.addEventListener('ended',function(){setTimeout(leave,3600)});var q=a.play();if(q&&q.catch)q.catch(leave);setTimeout(leave,12000)}catch(e){leave()}});
 f.insertBefore(b,f.firstChild)}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(mk,80)});else setTimeout(mk,80);
 }catch(e){}})();
