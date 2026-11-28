@@ -67,6 +67,7 @@ function clipUrl(id){ const v=rawUrl(id);
 function hasClip(id){ return id && M.audio && M.audio[id]; }
 let cur=null; // WebAudio fallback source
 function stopWA(){ if(cur){ try{cur.stop()}catch(e){} cur=null; } }
+function softHint(card){ try{ if(!card||localStorage.getItem('plhint1')) return; localStorage.setItem('plhint1','1'); const h=document.createElement('div'); h.className='pl-tap'; h.textContent='🎧 اضغط ▶ مرة واحدة والصوت هيشتغل لوحده بعدها'; h.style.transition='opacity .6s'; card.insertBefore(h,card.firstChild); setTimeout(()=>{ h.style.opacity='0'; setTimeout(()=>h.remove(),700); },6000); }catch(e){} }
 function showErr(card,msg){ if(!card) return; card.classList.remove('playing'); let e=card.querySelector('.pl-err'); if(!e){ e=document.createElement('div'); e.className='pl-err'; const ab=card.querySelector('.pl-audio'); (ab&&ab.parentNode)?ab.parentNode.insertBefore(e,ab.nextSibling):card.insertBefore(e,card.firstChild); } e.innerHTML=msg; }
 function clearErr(card){ const e=card&&card.querySelector('.pl-err'); if(e) e.remove(); }
 function playWA(id,card){ // fallback: decode with WebAudio
@@ -91,7 +92,7 @@ function playClip(id,card){
   A.onerror=()=>{ if(failed) return; failed=true; playWA(id,card); };
   const pr=A.play();
   if(pr&&pr.catch) pr.catch(er=>{
-    if(er&&er.name==='NotAllowedError'){ showErr(card,'🎧 اضغط ▶ عشان الصوت يشتغل (المتصفح بيمنع التشغيل التلقائي قبل أول ضغطة).'); const bb=card&&card.querySelector('.pl-play'); if(bb) bb.classList.add('pulse'); unlocked=false; }
+    if(er&&er.name==='NotAllowedError'){ softHint(card); const bb=card&&card.querySelector('.pl-play'); if(bb) bb.classList.add('pulse'); unlocked=false; }
     else if(!failed){ failed=true; playWA(id,card); }
   });
 }
@@ -122,8 +123,8 @@ function setupTabs(card){ const box=card&&card.querySelector('.pl-text'); if(!bo
   apply(init); card._apply=apply;
   bar.querySelectorAll('.pl-tab').forEach(b=>{ b.onclick=()=>{ card._man=true; apply(b.dataset.l); try{ localStorage.setItem('pltab',b.dataset.l); }catch(e){} langSeek(card,b.dataset.l); }; }); }
 /*pl-lm*/ let LM=null; try{ const sc=[...document.scripts].find(x=>/player\.js/.test(x.src)); const u=sc?sc.src.replace(/player\.js.*$/,'langmap.json'):'../assets/langmap.json'; fetch(u).then(r=>r.ok?r.json():null).then(j=>{ LM=j; }).catch(()=>{}); }catch(e){}
-function autoTab(card){ try{ if(!card||card._man||!card._apply||!LM||A._id!==card._aid) return; const e=LM[card._aid]; if(!e) return; const other=e[0]==='en'?'ar':'en'; const l=(A.currentTime<e[1]-0.05)?e[0]:other; if(card._cur!==l){ card._cur=l; card._apply(l); } }catch(x){} }
-function langSeek(card,l){ try{ const id=card._aid; const e=LM&&LM[id]; if(!e) return; const t=(l===e[0])?0:e[1]; unlocked=true; seekTo(card,id,t); }catch(x){} }
+function autoTab(card){ try{ if(!card||card._man||!card._apply||!LM||A._id!==card._aid) return; const e=LM[card._aid]; if(!e) return; const other=e[0]==='en'?'ar':'en'; const t=(e[1]==null)?1e9:e[1]; const l=(A.currentTime<t-0.05)?e[0]:other; if(card._cur!==l){ card._cur=l; card._apply(l); } }catch(x){} }
+function langSeek(card,l){ try{ const id=card._aid; const e=LM&&LM[id]; if(!e) return; if(e[1]==null) return; const t=(l===e[0])?0:e[1]; unlocked=true; seekTo(card,id,t); }catch(x){} }
 function wireAudio(card,id){
   const b=card.querySelector('.pl-play'); if(!b) return; const card0=card; card._aid=id;
   try{ const pd=new Audio(); pd.preload='metadata'; pd.src=clipUrl(id); pd.onloadedmetadata=()=>{ if(isFinite(pd.duration)){ card._dur=pd.duration; uiTime(card); } }; }catch(e){}
