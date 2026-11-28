@@ -1,5 +1,5 @@
 (function(){
-const PAGE=document.body.dataset.page, root=document.getElementById('qz'), BANK=window.BANK||[];
+const PAGE=document.body.dataset.page, root=document.getElementById('qz')||document.createElement('div'), BANK=window.BANK||[];
 const DAY=864e5, byId={}; BANK.forEach(b=>byId[b.id]=b);
 [window.MODTESTS,window.MODPRACT].forEach(m=>Object.keys(m||{}).forEach(k=>m[k].forEach(e=>e.items.forEach(b=>{ byId[b.id]=b; }))));
 const EXAMS=window.EXAMS||[]; EXAMS.forEach(e=>(e.items||[]).forEach(b=>{ byId[b.id]=b; }));
@@ -10,7 +10,7 @@ function srMiss(id){ const s=S(); s.sr[id]={st:0,due:Date.now()}; sv(s); }
 function srRight(id){ const s=S(), r=s.sr[id]; if(!r) return; if(r.st===0){ s.sr[id]={st:1,due:Date.now()+7*DAY}; } else { delete s.sr[id]; s.srm=(s.srm||0)+1; } sv(s); }
 function shuf(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function prep(b){ const ms=Array.isArray(b.a); const ix=shuf(b.o.map((_,i)=>i)); if(b.o.length===2||b.type==='tf') ix.sort((x,y)=>x-y); return {b, ix, ms, a:ms?b.a.map(x=>ix.indexOf(x)).sort((x,y)=>x-y):ix.indexOf(b.a)}; }
-function el(h){ root.innerHTML=h; window.scrollTo(0,0); }
+function el(h){ if(!root) return; root.innerHTML=h; window.scrollTo(0,0); }
 const NAMES={tefl:'TEFL',tefl2:'TEFL',poetry:'الشعر',intensive:'المنهج النقدي',analysis:'تحليل القصائد',grammar:'القواعد',all:'كل الأسئلة',myth:'الأساطير',history:'تاريخ الشعر',comp:'الأدب المقارن',lt:'نظرية الأدب',essay:'كتابة المقالة',skills:'مهارات اللغة'};
 let sfxOn=function(k){ };
 function tone(f,t,d){ try{ const c=new (window.AudioContext||window.webkitAudioContext)(), o=c.createOscillator(), g=c.createGain(); o.type='triangle'; o.frequency.value=f; g.gain.value=.12; o.connect(g); g.connect(c.destination); o.start(c.currentTime+t); o.stop(c.currentTime+t+d); }catch(e){} }

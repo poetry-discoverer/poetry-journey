@@ -121,3 +121,13 @@
 .pl-seg.done{color:#fff}
 .pl-seg.cur{color:#fff;transform:none;outline:3px solid #bfe6fb}
 .pl-top{position:static!important}
+
+/* calm card grid: no motion on tap */
+.pl-seg,.pl-top .pl-bar.pl-segs{transition:none!important;scroll-behavior:auto!important}
+.pl-seg.cur{transform:none!important;outline:3px solid #0b7fb8;outline-offset:-3px}
+.pl-count{text-decoration:none!important;border-bottom:0!important}
+
+.pl-top .pl-bar.pl-stepper{display:flex;align-items:center;justify-content:space-between;gap:8px;height:auto;max-height:none;overflow:visible;background:none;flex:1 1 100%;order:5;padding:2px 0}
+.pl-stl{font-weight:800;color:#444;font-size:15px;text-align:center;flex:1}
+.pl-st{border:2px solid #e5e5e5;background:#fff;border-radius:12px;padding:8px 14px;font:inherit;font-weight:800;color:#1a73b8;cursor:pointer;min-width:84px}
+.pl-st:disabled{opacity:.4;cursor:default}

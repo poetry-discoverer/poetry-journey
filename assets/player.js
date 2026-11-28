@@ -166,19 +166,14 @@ function review(){
   }
   one(); scrollTo(0,0);
 }
-function wireBar(){ const bar=document.querySelector('.pl-top .pl-bar'), cnt=document.querySelector('.pl-top .pl-count'); if(!bar||!cnt||S.length<2) return; const fill=bar.querySelector('i'); let drag=false, tgt=idx;
-  const pos=ev=>{ const e=document.elementFromPoint(ev.clientX,ev.clientY); const sg=e&&e.closest&&e.closest('.pl-seg'); if(sg&&bar.contains(sg)) return segs.indexOf(sg); let best=tgt,bd=1e9; segs.forEach((x,k)=>{ const r=x.getBoundingClientRect(); const d=Math.hypot(ev.clientX-(r.left+r.width/2),ev.clientY-(r.top+r.height/2)); if(d<bd){ bd=d; best=k; } }); return best; };
-  const N=S.length, K=N; bar.classList.add('pl-segs'); let hh=''; for(let k=0;k<K;k++) hh+='<b class="pl-seg"><span class="pl-num">'+(k+1)+'</span></b>'; bar.innerHTML=hh; const segs=[...bar.children];
-  const paint=n=>{ segs.forEach((e,k)=>{ e.className='pl-seg'+(k<n?' done':(k===n?' cur':'')); }); const c=segs[n]; if(c&&bar.scrollHeight>bar.clientHeight){ bar.scrollTop=Math.max(0,c.offsetTop-bar.clientHeight/2+c.offsetHeight/2); } };
-  const show=n=>{ tgt=n; paint(n); cnt.textContent=(n+1)+' / '+S.length; }; paint(idx);
-  const go=n=>{ if(n===idx) return; idx=n; back=false; render(); scrollTo(0,0); };
-  bar.setAttribute('role','slider'); bar.tabIndex=0; bar.setAttribute('aria-label','انتقل لكارت');
-  bar.onpointerdown=ev=>{ drag=true; try{ bar.setPointerCapture(ev.pointerId); }catch(e){} show(pos(ev)); ev.preventDefault(); };
-  bar.onpointermove=ev=>{ if(drag) show(pos(ev)); };
-  bar.onpointerup=ev=>{ if(!drag) return; drag=false; go(pos(ev)); };
-  bar.onpointercancel=()=>{ drag=false; show(idx); };
-  bar.onkeydown=ev=>{ const d=(ev.key==='ArrowRight'||ev.key==='ArrowUp')?1:(ev.key==='ArrowLeft'||ev.key==='ArrowDown')?-1:0; if(d){ go(Math.max(0,Math.min(S.length-1,idx+d))); ev.preventDefault(); } };
-  cnt.style.cursor='pointer'; cnt.onclick=()=>{ const v=prompt('اكتب رقم الكارت (1 - '+S.length+')',idx+1); const n=parseInt(String(v||'').replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)),10); if(n>=1&&n<=S.length) go(n-1); };
+function wireBar(){ const bar=document.querySelector('.pl-top .pl-bar'), cnt=document.querySelector('.pl-top .pl-count'); if(!bar||!cnt||S.length<2) return; const N=S.length;
+  bar.className='pl-bar pl-stepper'; bar.removeAttribute('role'); bar.removeAttribute('tabindex'); bar.innerHTML='<button type="button" class="pl-st pl-stp">\u2192 \u0633\u0627\u0628\u0642</button><span class="pl-stl"></span><button type="button" class="pl-st pl-stn">\u062a\u0627\u0644\u064a \u2190</button>';
+  const p=bar.querySelector('.pl-stp'), n=bar.querySelector('.pl-stn'), l=bar.querySelector('.pl-stl');
+  const q0=S[idx]&&(S[idx].t==='mc'||S[idx].t==='tf'||S[idx].t==='recall'||S[idx].t==='write');
+  l.textContent=(q0?'\u0633\u0624\u0627\u0644 ':'\u0643\u0627\u0631\u062a ')+(idx+1)+' \u0645\u0646 '+N; cnt.textContent=(idx+1)+' / '+N; cnt.onclick=null; cnt.style.cursor='default';
+  p.disabled=idx<=0; n.disabled=idx>=N-1;
+  const go=k=>{ if(k<0||k>=N||k===idx) return; const y=window.scrollY; idx=k; back=false; render(); window.scrollTo(0,y); requestAnimationFrame(()=>window.scrollTo(0,y)); };
+  p.onclick=ev=>{ ev.preventDefault(); go(idx-1); }; n.onclick=ev=>{ ev.preventDefault(); go(idx+1); };
 }
 function lcAward(){ const cur=S[idx]; if(PEEK||!cur||cur.t!=='learn') return; const q=st(); q.sx=q.sx||{}; const k=LID+':lc:'+idx; if(q.sx[k]) return; q.sx[k]=1; const n=(q.sx[LID+':lcn']||0)+1; q.sx[LID+':lcn']=n; save(q); if(n%4===0) xp(10,'📖'); }
 function render(){ render0(); try{ lcAward(); }catch(e){} try{ addRev(); }catch(e){} try{ wireBar(); }catch(e){} }
