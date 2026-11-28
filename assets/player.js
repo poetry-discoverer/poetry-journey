@@ -29,7 +29,8 @@ const root=document.getElementById('player'); if(!root||!window.STEPS) return;
 const S=window.STEPS.filter(s=>!s.hide), LID=window.LESSON_ID, M=window.AUDIO_MANIFEST||{audio:{},pdf:{}};
 function st(){ const s=state(); s.steps=s.steps||{}; s.sx=s.sx||{}; s.combo=s.combo||0; return s; }
 function sv(s){ save(s); refreshHeader(); }
-let idx=Math.min((st().steps[LID]||0),S.length-1); if(idx>=S.length-1) idx=0; // finished lessons restart try{ const hm=location.hash.match(/^#s=(\d+)/); if(hm) idx=Math.max(0,Math.min(+hm[1],S.length-1)); }catch(e){}
+let idx=Math.min((st().steps[LID]||0),S.length-1); if(idx>=S.length-1) idx=0; // finished lessons restart
+try{ const hm=location.hash.match(/^#s=(\d+)/); if(hm) idx=Math.max(0,Math.min(+hm[1],S.length-1)); }catch(e){}
 const QC=new URLSearchParams(location.search).get('card'); const PEEK=QC!==null&&/^\d+$/.test(QC); if(PEEK) idx=Math.min(+QC,S.length-1);
 let gained=0, back=false, missed=[], reviewed=false;
 const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -423,11 +423,27 @@ var wrap,inp,box,busy=false,cur='';
 function render(){var q=inp.value.trim();cur=q;var old=box.querySelector('#srdeep');if(old)old.remove();if(!q||q.length<2)return;
 load(function(){if(inp.value.trim()!==q)return;var r=find(q);var old2=box.querySelector('#srdeep');if(old2)old2.remove();if(!r.res.length)return;
 var h='<div id="srdeep"><div class="sr-h">\u062C\u0648\u0647 \u0627\u0644\u062F\u0631\u0648\u0633 \u2022 \u0646\u062A\u0627\u064A\u062C \u0628\u0627\u0644\u062A\u0641\u0627\u0635\u064A\u0644'+(r.total>r.res.length?' ('+r.total+')':'')+'</div>';
-r.res.forEach(function(o){var p=o.p;h+='<a class="sr-it sr-deep" href="'+root+'lessons/'+p.i+'.html#s='+p.s+'"><b>'+esc(o.T||p.i)+'</b><span class="sr-k">'+(p.h?esc(p.h)+' \u00B7 ':'')+(LT[p.t]||'')+'</span><small>'+snippet(p,r.ts)+'</small></a>'});
+r.res.forEach(function(o){var p=o.p;h+='<a class="sr-it sr-deep" href="'+root+'lessons/'+p.i+'.html#s='+p.s+'&q='+encodeURIComponent(r.ts.join(' '))+'"><b>'+esc(o.T||p.i)+'</b><span class="sr-k">'+(p.h?esc(p.h)+' \u00B7 ':'')+(LT[p.t]||'')+'</span><small>'+snippet(p,r.ts)+'</small></a>'});
 h+='</div>';busy=true;var em=box.querySelector('.sr-empty');if(em&&em.textContent.indexOf('\u0645\u0641\u064A\u0634')>-1)em.remove();var hs=[].slice.call(box.querySelectorAll('.sr-h')).filter(function(e){return e.textContent.indexOf('\u0645\u0631\u062A\u0628\u0637\u0629')>-1})[0];if(hs)hs.insertAdjacentHTML('beforebegin',h);else box.insertAdjacentHTML('beforeend',h);box.style.display='block';busy=false})}
 function init(){inp=document.getElementById('srq');box=document.getElementById('srbox');if(!inp||!box||inp.__deep)return false;inp.__deep=1;
 var t;inp.addEventListener('input',function(){clearTimeout(t);t=setTimeout(render,120)});inp.addEventListener('focus',function(){load(function(){})});
 new MutationObserver(function(){if(busy)return;if(inp.value.trim()&&!box.querySelector('#srdeep'))render()}).observe(box,{childList:true});
 var st=document.createElement('style');st.textContent='.sr-deep mark{background:#fff1a8;color:inherit;border-radius:3px;padding:0 1px}.sr-deep small{display:block;line-height:1.7;white-space:normal}';document.head.appendChild(st);return true}
 var tries=0,iv=setInterval(function(){if(init()||++tries>40)clearInterval(iv)},250);
+}catch(e){}})();
+
+/* jump-to-match: highlight search words inside the opened lesson card */
+(function(){try{var m=location.hash.match(/[#&]q=([^&]+)/);if(!m||!/\/lessons\//.test(location.pathname))return;
+var q=decodeURIComponent(m[1]);
+function norm(s){s=String(s||'').toLowerCase().replace(/[\u064b-\u0652\u0670\u0640]/g,'');return s.replace(/[\u0623\u0625\u0622]/g,'\u0627').replace(/\u0649/g,'\u064A').replace(/\u0629/g,'\u0647')}
+var ts=norm(q).split(/[^a-z0-9\u0600-\u06ff]+/).filter(function(w){return w.length>1}).map(function(w){return w.length>3&&w.indexOf('\u0627\u0644')===0?w.slice(2):w});if(!ts.length)return;
+var busy=false,done=0;
+function run(){if(busy)return;var P=document.getElementById('player');if(!P)return;busy=true;
+try{var w=document.createTreeWalker(P,NodeFilter.SHOW_TEXT,null),nodes=[],n;while(n=w.nextNode()){if(n.parentNode.closest&&n.parentNode.closest('mark.srhit,button,script,style'))continue;nodes.push(n)}
+var first=null;nodes.forEach(function(n){var t=n.nodeValue,nt=norm(t);if(nt.length!==t.length)return;var marks=[];ts.forEach(function(x){var f=0,i;while((i=nt.indexOf(x,f))>-1){marks.push([i,i+x.length]);f=i+x.length}});if(!marks.length)return;marks.sort(function(a,b){return a[0]-b[0]});var fr=document.createDocumentFragment(),last=0;marks.forEach(function(k){if(k[0]<last)return;fr.appendChild(document.createTextNode(t.slice(last,k[0])));var el=document.createElement('mark');el.className='srhit';el.setAttribute('style','background:#fff1a8;color:inherit;border-radius:3px;padding:0 1px');el.textContent=t.slice(k[0],k[1]);fr.appendChild(el);if(!first)first=el;last=k[1]});fr.appendChild(document.createTextNode(t.slice(last)));n.parentNode.replaceChild(fr,n)});
+if(first){done=1;first.scrollIntoView({block:'center',behavior:'smooth'})}}catch(e){}
+busy=false}
+var mo=new MutationObserver(function(){if(!done&&!busy)setTimeout(run,60)});
+function start(){var P=document.getElementById('player');if(!P){setTimeout(start,200);return}mo.observe(P,{childList:true,subtree:true});run();setTimeout(function(){mo.disconnect()},8000)}
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',start);else start();
 }catch(e){}})();
