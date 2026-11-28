@@ -1,0 +1,2 @@
+window.DEEP_KEYS=["analysis", "collocations", "comp", "essay", "grammar", "history", "intensive", "lt", "myth", "phrasal", "poetry", "psy", "skills", "verb"];
+window.DEEP_LT={"learn": "شرح", "mc": "سؤال", "tf": "صح/غلط", "recall": "تذكّر", "write": "كتابة"};
