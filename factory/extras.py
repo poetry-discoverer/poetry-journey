@@ -19,8 +19,12 @@ EX={'history':[('الكورس كامل (الدروس 1 إلى 47): إنجليز�
  ('الموديولان 22 و23: إنجليزي مبسط (A2-B1)','myth-m22-m23-English-A2B1.pdf'),('الموديولان 22 و23: إنجليزي + عربي','myth-m22-m23-English-Arabic.pdf'),
  ('الموديولان 24 و25: إنجليزي مبسط (A2-B1)','myth-m24-m25-English-A2B1.pdf'),('الموديولان 24 و25: إنجليزي + عربي','myth-m24-m25-English-Arabic.pdf'),
  ('الموديولان 26 و27: إنجليزي مبسط (A2-B1)','myth-m26-m27-English-A2B1.pdf'),('الموديولان 26 و27: إنجليزي + عربي','myth-m26-m27-English-Arabic.pdf'),
- ('الموديول 28: إنجليزي مبسط (A2-B1)','myth-m28-English-A2B1.pdf'),('الموديول 28: إنجليزي + عربي','myth-m28-English-Arabic.pdf')],
- 'poetry':[('تحليل القصائد، الدروس 1 و2: إنجليزي مبسط (A2-B1)','poetry-01-02-English-A2B1.pdf'),('تحليل القصائد، الدروس 1 و2: إنجليزي + عربي','poetry-01-02-English-Arabic.pdf'),('تحليل القصائد، الدروس 3 و4: إنجليزي مبسط (A2-B1)','poetry-03-04-English-A2B1.pdf'),('تحليل القصائد، الدروس 3 و4: إنجليزي + عربي','poetry-03-04-English-Arabic.pdf'),('تحليل القصائد، الدروس 5 و6: إنجليزي مبسط (A2-B1)','poetry-05-06-English-A2B1.pdf'),('تحليل القصائد، الدروس 5 و6: إنجليزي + عربي','poetry-05-06-English-Arabic.pdf'),('تحليل القصائد، الدروس 7 و8: إنجليزي مبسط (A2-B1)','poetry-07-08-English-A2B1.pdf'),('تحليل القصائد، الدروس 7 و8: إنجليزي + عربي','poetry-07-08-English-Arabic.pdf'),('تحليل القصائد، الدروس 9 و10: إنجليزي مبسط (A2-B1)','poetry-09-10-English-A2B1.pdf'),('تحليل القصائد، الدروس 9 و10: إنجليزي + عربي','poetry-09-10-English-Arabic.pdf'),('تحليل القصائد، الدروس 11 و12: إنجليزي مبسط (A2-B1)','poetry-11-12-English-A2B1.pdf'),('تحليل القصائد، الدروس 11 و12: إنجليزي + عربي','poetry-11-12-English-Arabic.pdf'),('تحليل القصائد، الدروس 13 و14: إنجليزي مبسط (A2-B1)','poetry-13-14-English-A2B1.pdf'),('تحليل القصائد، الدروس 13 و14: إنجليزي + عربي','poetry-13-14-English-Arabic.pdf')]}
+ ('الموديول 28: إنجليزي مبسط (A2-B1)','myth-m28-English-A2B1.pdf'),('الموديول 28: إنجليزي + عربي','myth-m28-English-Arabic.pdf')]}
+import glob,os
+_P=sorted({re.match(r'poetry-(\d+)-(\d+)',os.path.basename(f)).groups() for f in glob.glob(R+'/pdf/extra/poetry-*-English-A2B1.pdf')},key=lambda x:int(x[0]))
+EX['poetry']=[]
+for a,b in _P:
+    EX['poetry']+=[(f'تحليل القصائد، الدروس {int(a)} و{int(b)}: إنجليزي مبسط (A2-B1)',f'poetry-{a}-{b}-English-A2B1.pdf'),(f'تحليل القصائد، الدروس {int(a)} و{int(b)}: إنجليزي + عربي',f'poetry-{a}-{b}-English-Arabic.pdf')]
 for t,L in EX.items():
     f=f'{R}/track-{t}.html';s=open(f,encoding='utf-8').read()
     s=re.sub(r'<div class="extra-files">.*?</div>\n?','',s,flags=re.S)
