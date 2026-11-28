@@ -25,6 +25,7 @@ _P=sorted({re.match(r'poetry-(\d+)-(\d+)',os.path.basename(f)).groups() for f in
 EX['poetry']=[]
 for a,b in _P:
     EX['poetry']+=[(f'تحليل القصائد، الدروس {int(a)} و{int(b)}: إنجليزي مبسط (A2-B1)',f'poetry-{a}-{b}-English-A2B1.pdf'),(f'تحليل القصائد، الدروس {int(a)} و{int(b)}: إنجليزي + عربي',f'poetry-{a}-{b}-English-Arabic.pdf')]
+EX['grammar-c2']=[('القواعد المتقدمة، الدروس 1 إلى 4: إنجليزي مبسط','grammar-c2-en-L01-L04.pdf'),('القواعد المتقدمة، الدروس 1 إلى 4: إنجليزي + مصري','grammar-c2-combined-L01-L04.pdf'),('القواعد المتقدمة، الدروس 1 إلى 4: ملخصات الدروس','grammar-c2-summaries-L01-L04.pdf')]
 for t,L in EX.items():
     f=f'{R}/track-{t}.html';s=open(f,encoding='utf-8').read()
     s=re.sub(r'<div class="extra-files">.*?</div>\n?','',s,flags=re.S)
