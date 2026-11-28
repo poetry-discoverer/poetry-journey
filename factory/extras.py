@@ -33,6 +33,13 @@ EX['grammar-c2']=[(f'القواعد المتقدمة، الكورس كامل (1 
 EX['comp']=[]
 for r,t in [('01','1'),('02-05','2 إلى 5'),('06-09','6 إلى 9'),('10-13','10 إلى 13'),('14-18','14 إلى 18'),('19-22','19 إلى 22')]:
     EX['comp']+=[(f'الفهم والقراءة، الدروس {t}: إنجليزي مبسط',f'comp-en-{r}.pdf'),(f'الفهم والقراءة، الدروس {t}: إنجليزي + مصري',f'comp-combined-{r}.pdf'),(f'الفهم والقراءة، الدروس {t}: ملخصات',f'comp-summaries-{r}.pdf')]
+_cr=[]
+for f in glob.glob(R+'/pdf/extra/comp-en-L*.pdf'):
+    m=re.match(r'comp-en-L(\d+)(?:-L(\d+))?\.pdf',os.path.basename(f))
+    if m: _cr.append((int(m.group(1)),int(m.group(2) or m.group(1)),os.path.basename(f)[len('comp-en-'):-4]))
+for a,b,r in sorted(_cr,key=lambda x:(x[1]-x[0]!=0,x[0])):
+    tt=f'الدروس {a} إلى {b}' if a!=b else f'الدرس {a}'
+    EX['comp']+=[(f'الفهم والقراءة، {tt} (نسخة معاد بناؤها): إنجليزي مبسط',f'comp-en-{r}.pdf'),(f'الفهم والقراءة، {tt} (نسخة معاد بناؤها): إنجليزي + مصري',f'comp-combined-{r}.pdf'),(f'الفهم والقراءة، {tt} (نسخة معاد بناؤها): ملخصات',f'comp-summaries-{r}.pdf')]
 EX['history']+=[('الدروس 48 إلى 52: إنجليزي مبسط','history-en-L48-L52.pdf'),('الدروس 48 إلى 52: إنجليزي + مصري','history-combined-L48-L52.pdf'),('الدروس 48 إلى 52: ملخصات','history-summaries-L48-L52.pdf'),('الدروس 53 إلى 55: إنجليزي مبسط','history-en-L53-L55.pdf'),('الدروس 53 إلى 55: إنجليزي + مصري','history-combined-L53-L55.pdf'),('الدروس 53 إلى 55: ملخصات','history-summaries-L53-L55.pdf'),('الدروس 101 إلى 104: إنجليزي مبسط','history-en-L101-L104.pdf'),('الدروس 101 إلى 104: إنجليزي + مصري','history-combined-L101-L104.pdf'),('الدروس 101 إلى 104: ملخصات','history-summaries-L101-L104.pdf')]
 EX['grammar']=[]
 for f in sorted(glob.glob(R+'/pdf/extra/grammar-[0-9]*-English-A2B1.pdf')):
