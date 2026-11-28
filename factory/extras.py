@@ -25,7 +25,13 @@ _P=sorted({re.match(r'poetry-(\d+)-(\d+)',os.path.basename(f)).groups() for f in
 EX['poetry']=[]
 for a,b in _P:
     EX['poetry']+=[(f'تحليل القصائد، الدروس {int(a)} و{int(b)}: إنجليزي مبسط (A2-B1)',f'poetry-{a}-{b}-English-A2B1.pdf'),(f'تحليل القصائد، الدروس {int(a)} و{int(b)}: إنجليزي + عربي',f'poetry-{a}-{b}-English-Arabic.pdf')]
-EX['grammar-c2']=[('القواعد المتقدمة، الدروس 1 إلى 4: إنجليزي مبسط','grammar-c2-en-L01-L04.pdf'),('القواعد المتقدمة، الدروس 1 إلى 4: إنجليزي + مصري','grammar-c2-combined-L01-L04.pdf'),('القواعد المتقدمة، الدروس 1 إلى 4: ملخصات الدروس','grammar-c2-summaries-L01-L04.pdf')]
+EX['grammar-c2']=[]
+for r,t in [('L01-L04','1 إلى 4'),('L05-L06','5 و6'),('L07-L09','7 إلى 9'),('L10-L12','10 إلى 12'),('L13-L15','13 إلى 15')]:
+    EX['grammar-c2']+=[(f'القواعد المتقدمة، الدروس {t}: إنجليزي مبسط',f'grammar-c2-en-{r}.pdf'),(f'القواعد المتقدمة، الدروس {t}: إنجليزي + مصري',f'grammar-c2-combined-{r}.pdf'),(f'القواعد المتقدمة، الدروس {t}: ملخصات الدروس',f'grammar-c2-summaries-{r}.pdf')]
+EX['comp']=[]
+for r,t in [('01','1'),('02-05','2 إلى 5')]:
+    EX['comp']+=[(f'الفهم والقراءة، الدروس {t}: إنجليزي مبسط',f'comp-en-{r}.pdf'),(f'الفهم والقراءة، الدروس {t}: إنجليزي + مصري',f'comp-combined-{r}.pdf'),(f'الفهم والقراءة، الدروس {t}: ملخصات',f'comp-summaries-{r}.pdf')]
+EX['history']+=[('الدروس 48 إلى 52: إنجليزي مبسط','history-en-L48-L52.pdf'),('الدروس 48 إلى 52: إنجليزي + مصري','history-combined-L48-L52.pdf'),('الدروس 48 إلى 52: ملخصات','history-summaries-L48-L52.pdf')]
 for t,L in EX.items():
     f=f'{R}/track-{t}.html';s=open(f,encoding='utf-8').read()
     s=re.sub(r'<div class="extra-files">.*?</div>\n?','',s,flags=re.S)
