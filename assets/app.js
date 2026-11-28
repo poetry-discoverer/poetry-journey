@@ -447,3 +447,17 @@ var mo=new MutationObserver(function(){if(!done&&!busy)setTimeout(run,60)});
 function start(){var P=document.getElementById('player');if(!P){setTimeout(start,200);return}mo.observe(P,{childList:true,subtree:true});run();setTimeout(function(){mo.disconnect()},8000)}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',start);else start();
 }catch(e){}})();
+
+/* header: collapse on scroll down, return on scroll up; quick exit button in the home header */
+(function(){try{
+var tb=null,last=0,tk=false;
+function init(){tb=document.querySelector('.topbar');if(!tb)return;last=window.pageYOffset||0;
+addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;var y=window.pageYOffset||0,d=y-last;
+if(y<60){tb.classList.remove('tb-hide')}else if(d>8){tb.classList.add('tb-hide')}else if(d<-8){tb.classList.remove('tb-hide')}
+if(Math.abs(d)>8)last=y})},{passive:true});
+var w=tb.querySelector('.wrap'),f=document.getElementById('exitbtn');
+if(w&&!document.getElementById('exitq')){var p=location.pathname,isHome=/\/(index\.html)?$/.test(p)&&!/\/lessons\//.test(p);
+if(isHome){var b=document.createElement('button');b.id='exitq';b.type='button';b.textContent='\u062E\u0631\u0648\u062C \uD83D\uDEAA';b.setAttribute('style','margin-inline-start:auto;padding:6px 12px;border-radius:12px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;font-size:.85rem;cursor:pointer;flex:none');
+b.addEventListener('click',function(){var e=document.getElementById('exitbtn');if(e)e.click()});w.appendChild(b)}}}
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(init,200)});else setTimeout(init,200);
+}catch(e){}})();

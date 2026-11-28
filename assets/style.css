@@ -240,3 +240,5 @@ span.en{font-size:inherit;line-height:inherit;color:inherit;border:0;border-radi
 @keyframes prIn{from{transform:translate(-50%,40px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
 @keyframes prFall{to{transform:translateY(105vh) rotate(360deg);opacity:.9}}
 @media (prefers-reduced-motion:reduce){.pconf{display:none}.praise{animation:none}}
+.topbar{transition:transform .22s ease}
+.topbar.tb-hide{transform:translateY(-110%)!important}
