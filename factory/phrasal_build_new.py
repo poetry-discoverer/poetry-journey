@@ -44,7 +44,7 @@ for l in L:
     add({'t':'section','h':'الملخص'})
     add({'t':'learn','h':u(ent(l['summary_ar']))+u(en(l['summary_en'])),'n':2})
     nxt=f'phrasal-{n+1:02d}'
-    add({'t':'end','h':'','teaser':u('الدرس الجاي: '+(('الوحدة '+str(num+1)) if l2 and num<12 else ('الأفعال المركبة '+str(n+1) if (not l2 and n<42) else ('وحدات جديدة هتنزل قريب' if l2 else 'التنين: الوحدة 1')))),'extra':''})
+    add({'t':'end','h':'','teaser':u('الدرس الجاي: '+(('الوحدة '+str(num+1)) if l2 and num<20 else ('الأفعال المركبة '+str(n+1) if (not l2 and n<42) else ('وحدات جديدة هتنزل قريب' if l2 else 'التنين: الوحدة 1')))),'extra':''})
     PK=f'/tmp/ppk/L2-{num:02d}' if l2 else f'/tmp/ppk/{n:02d}';btn=''
     for fn,dst in ((glob.glob(PK+'/*.pdf'),f'pdf/{lid}.pdf'),(glob.glob(PK+'/*mindmap*.png'),f'mindmaps/mindmap-{lid}.png')):
         if fn: os.makedirs(os.path.dirname(R+dst),exist_ok=True); shutil.copy(fn[0],R+dst)
