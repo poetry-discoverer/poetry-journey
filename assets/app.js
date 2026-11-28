@@ -298,7 +298,7 @@ function credit(){var f=document.querySelector('.footer');if(!f||f.querySelector
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',credit);else credit();
 if(!/(\/|index\.html|offline\.html|studied\.html|progress\.html|review\.html|exam\.html|exams\.html|glossary\.html|track-[^\/]*\.html|module[^\/]*\.html|lessons\/[^\/]*\.html)$/.test(p))return;
 var EV=['pointerdown','touchstart','keydown','click'];
-function run(){if(window.__wlcSplash)return;var a=new Audio(base+'basmala.mp3');a.preload='auto';var done=false;
+function run(){if(window.__wlcSplash)return;var MAIN=/(\/|index\.html|track-[^\/]*\.html|modules[^\/]*\.html)$/.test(p);var a=new Audio(base+(MAIN?'basmala.mp3':'salawat.mp3'));a.preload='auto';var done=false;
 function off(){done=true;EV.forEach(function(t){document.removeEventListener(t,go,true)})}
 function go(){if(done)return;var q;try{q=a.play()}catch(e){off();return}if(q&&q.then)q.then(off).catch(function(){});else off()}
 function arm(){EV.forEach(function(t){document.addEventListener(t,go,true)})}
