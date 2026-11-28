@@ -145,3 +145,5 @@ How the "آداب الإنجليزية: قواعد وجرامر وشعر وأس�
 80. Extra files tab (owner, 28 Nov): the extra PDFs and extra course links of each course live on their own page extras-<course>.html, opened by one button "📚 ملفات إضافية للكورس" on the course page. `extras.py` builds the lists and calls `extras_tab.py`, which moves them (idempotent). Applies to all Adab tracks and TeacherRecord.
 81. grammar-c2 lessons are wired with `c2_pub.py NN` then `c2_fix.py NN`; summaries and mind maps are added later.
 82. Text fixes comp-08 (Pushkin removed) and comp-14 (1851 London removed) applied in lessons, exams, bank and deep data.
+83. grammar-c2 workflow: `./c2_all.sh NN...` runs c2_pub, c2_fix, c2_mm (mind map from the lesson page), splits new combined summary PDFs (c2_sumsplit.py) into per-lesson `pdf/summary-grammar-c2-NN.pdf`, adds the buttons (c2_btn.py), extras.py, then pubsite. Run `./c2_all.sh` alone for summaries only.
+84. Quiz fixes: stray or duplicate MCQ options replaced in comp-06/07/08/14/20, skills-01/02/03, c2-39, c2-40, psy-34, in lessons, exams, bank and deep data.
