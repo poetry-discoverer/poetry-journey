@@ -30,7 +30,7 @@ function flushToasts(){ const q=window.__toasts.splice(0); if(!q.length) return;
   q.forEach((m,i)=>setTimeout(()=>{ const d=document.createElement('div'); d.className='toast'; d.textContent=m; box.appendChild(d); setTimeout(()=>d.remove(),3800); },i*900)); }
 function renderBadges(){ const el=document.getElementById('badges-list'); if(!el) return; const got=state().badges||{};
   el.innerHTML=BADGES.map(b=>'<div class="badge'+(got[b.id]?' on':'')+'" role="img" aria-label="'+b.t+(got[b.id]?'':' (لسه)')+'"><span class="be">'+b.e+'</span><span class="bt">'+b.t+'</span></div>').join(''); }
-function a11y(){
+function a11y(){ try{bidiFix()}catch(e){}
   document.querySelectorAll('.bar:not([role]),.pl-bar:not([role])').forEach(b=>{ const i=b.querySelector('i'); b.setAttribute('role','progressbar'); b.setAttribute('aria-valuemin','0'); b.setAttribute('aria-valuemax','100'); b.setAttribute('aria-label','التقدم'); b.dataset.a11y='1'; });
   document.querySelectorAll('[role=progressbar][data-a11y]').forEach(b=>{ const i=b.querySelector('i'); if(i&&i.style.width) b.setAttribute('aria-valuenow',parseInt(i.style.width)||0); });
   document.querySelectorAll('.pill.xp:not([aria-label])').forEach(e=>e.setAttribute('aria-label','نقاط الخبرة'));
@@ -41,6 +41,16 @@ function a11y(){
     const t=e.textContent||''; const l=(t.match(LAT)||[]).length, a=(t.match(ARB)||[]).length;
     if(l>=3&&a===0){ e.setAttribute('lang','en'); if(e.tagName!=='BUTTON'&&e.tagName!=='SPAN') e.setAttribute('dir','ltr'); }
   });
+}
+
+function bidiFix(){
+  const T="[A-Za-z0-9'\u2019\\-\\.\\/]*", RUN=new RegExp("[A-Za-z]"+T+"(?:\\s+[A-Za-z0-9]"+T+")*(?:\\s*[\u060c,]\\s*[A-Za-z]"+T+"(?:\\s+[A-Za-z0-9]"+T+")*)*","g");
+  const root=document.querySelector('main')||document.body; if(!root) return;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{ const p=n.parentElement; if(!p||!/[A-Za-z]/.test(n.nodeValue)||!/[\u0600-\u06FF]/.test(n.nodeValue)) return NodeFilter.FILTER_REJECT; if(p.closest('script,style,textarea,input,#player,.en,bdi,[dir=ltr],[lang=en],code,pre')) return NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_ACCEPT; }});
+  const L=[]; while(w.nextNode()) L.push(w.currentNode);
+  L.forEach(n=>{ const t=n.nodeValue; let last=0, m, any=false; const f=document.createDocumentFragment(); RUN.lastIndex=0;
+    while((m=RUN.exec(t))){ if(!/[\s\u060c,]/.test(m[0])) continue; any=true; if(m.index>last) f.appendChild(document.createTextNode(t.slice(last,m.index))); const b=document.createElement('bdi'); b.setAttribute('dir','ltr'); b.textContent=m[0].replace(/\s*\u060c\s*/g,', '); f.appendChild(b); last=m.index+m[0].length; }
+    if(!any) return; if(last<t.length) f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f,n); });
 }
 let __a11yT=0; function a11yLater(){ clearTimeout(__a11yT); __a11yT=setTimeout(a11y,60); }
 if(typeof MutationObserver!=='undefined') addEventListener('DOMContentLoaded',()=>{ a11y(); new MutationObserver(a11yLater).observe(document.body,{childList:true,subtree:true}); });
