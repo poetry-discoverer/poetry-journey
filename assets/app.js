@@ -348,3 +348,15 @@ setTimeout(pre,1500);
 addEventListener('pagehide',go);
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')go()});
 }catch(e){}})();
+
+/* salawat on PDF open/download and external links (plays on the click itself, never blocks navigation) */
+(function(){try{
+var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
+var a=null,t0=0;
+function sal(){try{var n=Date.now();if(n-t0<1500)return;t0=n;if(!a){a=new Audio(base+'salawat.mp3');a.preload='auto'}a.currentTime=0;var q=a.play();if(q&&q.catch)q.catch(function(){})}catch(e){}}
+document.addEventListener('click',function(e){try{var l=e.target&&e.target.closest&&e.target.closest('a[href]');if(!l)return;var h=l.getAttribute('href')||'';if(/^(#|javascript:|mailto:|tel:)/i.test(h))return;var u=new URL(l.href,location.href);
+var ext=u.origin!==location.origin;var file=/\.(pdf|xlsx|zip)(\?|#|$)/i.test(u.pathname)||/viewer|docs\.google\.com/.test(u.href);
+if(ext||file)sal()}catch(x){}},true);
+function cr(){var f=document.querySelector('.footer');if(!f||f.querySelector('.sal-credit'))return;var c=document.createElement('div');c.className='sal-credit';c.setAttribute('style','margin-top:4px;font-size:.8rem;opacity:.75');c.textContent='\u0627\u0644\u0635\u0644\u0627\u0629 \u0639\u0644\u0649 \u0627\u0644\u0646\u0628\u064A - archive.org';f.appendChild(c)}
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(cr,50)});else setTimeout(cr,50);
+}catch(e){}})();
