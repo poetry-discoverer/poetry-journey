@@ -15,7 +15,8 @@ EX={'history':[('الدروس 32 إلى 35: إنجليزي مبسط','history-en
  ('الموديولان 18 و19: إنجليزي مبسط (A2-B1)','myth-m18-m19-English-A2B1.pdf'),('الموديولان 18 و19: إنجليزي + عربي','myth-m18-m19-English-Arabic.pdf'),
  ('الموديولان 20 و21: إنجليزي مبسط (A2-B1)','myth-m20-m21-English-A2B1.pdf'),('الموديولان 20 و21: إنجليزي + عربي','myth-m20-m21-English-Arabic.pdf'),
  ('الموديولان 22 و23: إنجليزي مبسط (A2-B1)','myth-m22-m23-English-A2B1.pdf'),('الموديولان 22 و23: إنجليزي + عربي','myth-m22-m23-English-Arabic.pdf'),
- ('الموديولان 24 و25: إنجليزي مبسط (A2-B1)','myth-m24-m25-English-A2B1.pdf'),('الموديولان 24 و25: إنجليزي + عربي','myth-m24-m25-English-Arabic.pdf')]}
+ ('الموديولان 24 و25: إنجليزي مبسط (A2-B1)','myth-m24-m25-English-A2B1.pdf'),('الموديولان 24 و25: إنجليزي + عربي','myth-m24-m25-English-Arabic.pdf'),
+ ('الموديولان 26 و27: إنجليزي مبسط (A2-B1)','myth-m26-m27-English-A2B1.pdf'),('الموديولان 26 و27: إنجليزي + عربي','myth-m26-m27-English-Arabic.pdf')]}
 for t,L in EX.items():
     f=f'{R}/track-{t}.html';s=open(f,encoding='utf-8').read()
     s=re.sub(r'<div class="extra-files">.*?</div>\n?','',s,flags=re.S)
