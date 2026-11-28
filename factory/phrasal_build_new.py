@@ -17,7 +17,7 @@ pass
 ids=[];nodes=[];nodes2=[]
 for l in L:
     n=l['lesson']; l2=l['section']=='phrasal_level2'; num=l['unit'] if l2 else n; lid=f'phrasal-l2-{num:02d}' if l2 else f'phrasal-{n:02d}'; ids.append(lid)
-    title=(f'المستوى الثاني، الوحدة {num}: ' if l2 else f'الأفعال المركبة {n}: ')+'، '.join(v['phrasal'] for v in l['items']); D[lid]=title
+    title=(f'التنين، الوحدة {num}: ' if l2 else f'الأفعال المركبة {n}: ')+'، '.join(v['phrasal'] for v in l['items']); D[lid]=title
     S=[]
     def add(d): d['i']=len(S); S.append(d)
     for v in l['items']:
@@ -44,7 +44,7 @@ for l in L:
     add({'t':'section','h':'الملخص'})
     add({'t':'learn','h':u(ent(l['summary_ar']))+u(en(l['summary_en'])),'n':2})
     nxt=f'phrasal-{n+1:02d}'
-    add({'t':'end','h':'','teaser':u('الدرس الجاي: '+(('الوحدة '+str(num+1)) if l2 and num<12 else ('الأفعال المركبة '+str(n+1) if (not l2 and n<42) else ('وحدات جديدة هتنزل قريب' if l2 else 'المستوى الثاني: الوحدة 1')))),'extra':''})
+    add({'t':'end','h':'','teaser':u('الدرس الجاي: '+(('الوحدة '+str(num+1)) if l2 and num<12 else ('الأفعال المركبة '+str(n+1) if (not l2 and n<42) else ('وحدات جديدة هتنزل قريب' if l2 else 'التنين: الوحدة 1')))),'extra':''})
     PK=f'/tmp/ppk/L2-{num:02d}' if l2 else f'/tmp/ppk/{n:02d}';btn=''
     for fn,dst in ((glob.glob(PK+'/*.pdf'),f'pdf/{lid}.pdf'),(glob.glob(PK+'/*mindmap*.png'),f'mindmaps/mindmap-{lid}.png')):
         if fn: os.makedirs(os.path.dirname(R+dst),exist_ok=True); shutil.copy(fn[0],R+dst)
@@ -57,7 +57,7 @@ for l in L:
     H=H.replace('الدرس M14',('الوحدة ' if l2 else 'الدرس ')+str(num)).replace('myth-m14',lid)
     for pat in (r'\n<a class="pdf-link"[^\n]*',r'\n<a class="pdf-link mp3-link"[^\n]*',r'\n<a class="pdf-link mm-link"[^\n]*'): H=re.sub(pat,'',H)
     H=re.sub(r'\n<details class="mm">.*?</details>','',H,flags=re.S)
-    H=re.sub(r'<div class="tags">.*?</div>','<div class="tags"><span class="tag">5 أفعال مركبة</span>'+('<span class="tag">المستوى الثاني</span>' if l2 else '')+'</div>',H,count=1,flags=re.S)
+    H=re.sub(r'<div class="tags">.*?</div>','<div class="tags"><span class="tag">5 أفعال مركبة</span>'+('<span class="tag">التنين</span>' if l2 else '')+'</div>',H,count=1,flags=re.S)
     H=re.sub(r'window\.LESSON_ID="[^;]*;window\.STEPS=\[.*?\];</script>',lambda _:f'window.LESSON_ID="{lid}";window.STEPS='+json.dumps(S,ensure_ascii=False)+';</script>',H,count=1,flags=re.S)
     H=re.sub(r'data-lesson="[^>]*>',f'data-lesson="{lid}">',H,count=1)
     if btn: H=H.replace('</div>\n\n<div id="player"',btn+'\n</div>\n\n<div id="player"',1)

@@ -81,7 +81,7 @@ for b in order:
 for gi,grp in enumerate(GROUPS,41):
     lid=f'verb-{gi:02d}'; ids.append(lid)
     names='، '.join(grp)
-    title=f'الأفعال الشاذة، المستوى الثاني، الوحدة {gi-40}: '+names
+    title=f'الأفعال الشاذة، التنين، الوحدة {gi-40}: '+names
     D[lid]=title
     S=[]
     for b in grp: S+=steps(V[b],None,i0=len(S),end=False)
@@ -114,7 +114,7 @@ for gi,grp in enumerate(GROUPS,41):
     for pat in (r'\n<a class="pdf-link"[^\n]*',r'\n<a class="pdf-link mp3-link"[^\n]*',r'\n<a class="pdf-link mm-link"[^\n]*'): H=re.sub(pat,'',H)
     H=re.sub(r'\n<details class="mm">.*?</details>','',H,flags=re.S)
     lv=sorted({V[b]['level'] for b in grp})
-    H=re.sub(r'<div class="tags">.*?</div>',f'<div class="tags"><span class="tag">{len(grp)} أفعال</span><span class="tag">المستوى الثاني</span></div>',H,count=1,flags=re.S)
+    H=re.sub(r'<div class="tags">.*?</div>',f'<div class="tags"><span class="tag">{len(grp)} أفعال</span><span class="tag">التنين</span></div>',H,count=1,flags=re.S)
     H=re.sub(r'window\.LESSON_ID="[^;]*;window\.STEPS=\[.*?\];</script>',lambda _:f'window.LESSON_ID="{lid}";window.STEPS='+json.dumps(S,ensure_ascii=False)+';</script>',H,count=1,flags=re.S)
     H=re.sub(r'data-lesson="[^>]*>',f'data-lesson="{lid}">',H,count=1)
     if btn: H=H.replace('</div>\n\n<div id="player"',btn+'\n</div>\n\n<div id="player"',1)

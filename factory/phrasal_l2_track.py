@@ -7,9 +7,9 @@ s=re.sub(r'<div class="lvhead l[12]head".*?</div>\n','',s)
 s=re.sub(r'<div class="node-row fade">\n<a class="node" data-id="phrasal-(?:3[89]|4\d|l2-\d+)".*?</div>\n</div>\n','',s,flags=re.S)
 H='<div class="lvhead %s" style="margin:30px 0 10px;padding:14px;border-radius:16px;background:%s;font-weight:900;font-size:1.3em;text-align:center">%s</div>\n'
 a=s.index('<div class="path">')+len('<div class="path">\n')
-s=s[:a]+H%('l1head','#e8f7ee','المستوى الأول: الأفعال المركبة (الدروس 1 إلى 42)')+s[a:]
+s=s[:a]+H%('l1head','#e8f7ee','المتمرس: الأفعال المركبة (الدروس 1 إلى 42)')+s[a:]
 k=s.index('</main>');e=s.rfind('</div>\n</div>\n',0,k)+len('</div>\n')
-s=s[:e]+n1+H%('l2head','#fff1dc','المستوى الثاني: الأفعال المركبة الأغرب (الاستعمالات النادرة والأدبية)')+n2+s[e:]
+s=s[:e]+n1+H%('l2head','#fff1dc','التنين: الأفعال المركبة الأغرب (الاستعمالات النادرة والأدبية)')+n2+s[e:]
 allids=[f'phrasal-{i:02d}' for i in range(1,38)]+ids
 s=re.sub(r'data-overall="[^"]*"','data-overall="'+','.join(allids)+'"',s,count=1)
 s=re.sub(r'window\.ALL_IDS=\[[^\]]*\]','window.ALL_IDS='+json.dumps(allids),s,count=1)

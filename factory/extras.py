@@ -73,3 +73,5 @@ for t,L in EX.items():
     m=list(re.finditer(r'<details class="mm course-mm">.*?</details>\n?',s,re.S))
     if not m: print('noplace',t);continue
     s=s[:m[-1].end()]+box+s[m[-1].end():];open(f,'w',encoding='utf-8').write(s);print(t,len(L))
+
+import subprocess;subprocess.run(["python3","/tmp/extras_tab.py",R])

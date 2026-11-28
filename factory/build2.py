@@ -8,7 +8,7 @@ def link_en(t):
         w=m.group(0); return '<a href="%s">%s</a>'%(u(w),html.escape(w))
     parts=re.split(r"([A-Za-z]+(?:'[a-z]+)?)",t)
     return ''.join(f(re.match('.*',p)) if re.fullmatch(r"[A-Za-z]+(?:'[a-z]+)?",p) else html.escape(p) for p in parts)
-names={'verbs-l2':('الأفعال الشاذة: المستوى الثاني','Irregular Verbs Level 2'),'phrasal-l2':('الأفعال المركبة: المستوى الثاني','Phrasal Verbs Level 2'),'verbs':('الأفعال الشاذة','Irregular Verbs'),'phrasal':('الأفعال المركبة','Phrasal / Compound Verbs'),'collocations':('الكولوكيشنز','Collocations')}
+names={'verbs-l2':('الأفعال الشاذة: التنين','Irregular Verbs Level 2'),'phrasal-l2':('الأفعال المركبة: التنين','Phrasal Verbs Level 2'),'verbs':('الأفعال الشاذة','Irregular Verbs'),'phrasal':('الأفعال المركبة','Phrasal / Compound Verbs'),'collocations':('الكولوكيشنز','Collocations')}
 CSS=open('css.txt').read()
 for tr,es in d.items():
     es=[e for e in es if e['ar']]
