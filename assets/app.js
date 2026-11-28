@@ -360,3 +360,17 @@ if(ext||file)sal()}catch(x){}},true);
 function cr(){var f=document.querySelector('.footer');if(!f||f.querySelector('.sal-credit'))return;var c=document.createElement('div');c.className='sal-credit';c.setAttribute('style','margin-top:4px;font-size:.8rem;opacity:.75');c.textContent='\u0627\u0644\u0635\u0644\u0627\u0629 \u0639\u0644\u0649 \u0627\u0644\u0646\u0628\u064A - archive.org';f.appendChild(c)}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(cr,50)});else setTimeout(cr,50);
 }catch(e){}})();
+
+/* alhamdulillah on return to home (flag survives the navigation; home page plays it instead of the basmala) */
+(function(){try{
+var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
+var root=new URL(base+'../',location.href).pathname;
+function isHome(p){return p===root||p===root+'index.html'}
+var onHome=isHome(location.pathname);
+if(onHome){var fl=null;try{fl=sessionStorage.getItem('hamdHome');sessionStorage.removeItem('hamdHome')}catch(e){}
+if(fl&&Date.now()-(+fl)<15000){window.__wlcSplash=true;var go=function(){try{var a=new Audio(base+'alhamdulillah.mp3');var q=a.play();if(q&&q.catch)q.catch(function(){arm()})}catch(e){}};
+var EVS=['pointerdown','touchstart','keydown','click'],armed=false;
+function arm(){if(armed)return;armed=true;var f=function(){EVS.forEach(function(t){document.removeEventListener(t,f,true)});try{new Audio(base+'alhamdulillah.mp3').play().catch(function(){})}catch(e){}};EVS.forEach(function(t){document.addEventListener(t,f,true)})}
+go()}}
+else document.addEventListener('click',function(e){try{var l=e.target&&e.target.closest&&e.target.closest('a[href]');if(!l)return;var u=new URL(l.href,location.href);if(u.origin===location.origin&&isHome(u.pathname)&&!l.hasAttribute('download')&&l.target!=='_blank'){try{sessionStorage.setItem('hamdHome',String(Date.now()))}catch(x){}}}catch(x){}},true);
+}catch(e){}})();
