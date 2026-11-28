@@ -63,7 +63,7 @@ function rawUrl(id){ return M.audio[id]; }
 function toBytes(u){ const m=u.match(/^data:([^;,]+)?(;base64)?,(.*)$/s); const bin=atob(m[3]); const a=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) a[i]=bin.charCodeAt(i); return {a,mime:m[1]||'audio/mpeg'}; }
 function clipUrl(id){ const v=rawUrl(id);
   if(/^data:/.test(v)){ if(!blobs[id]){ try{ const r=toBytes(v); blobs[id]=URL.createObjectURL(new Blob([r.a],{type:r.mime})); }catch(e){ blobs[id]=v; } } return blobs[id]; }
-  return '../audio/'+v; }
+  return /^\//.test(v)?v:'../audio/'+v; }
 function hasClip(id){ return id && M.audio && M.audio[id]; }
 let cur=null; // WebAudio fallback source
 function stopWA(){ if(cur){ try{cur.stop()}catch(e){} cur=null; } }
@@ -222,7 +222,7 @@ render();
   const SITE=({'poetry-journey':'poetry-offline','learn-tefl':'tefl-offline','tefl-practical':'tefl2-offline'})[location.pathname.split('/')[1]]||'poetry-offline'
   const CN=SITE;
   const urls=()=>{ const u=[location.pathname]; const pdf=M.pdf&&M.pdf[LID]; if(pdf) u.push(new URL('../pdf/'+pdf,location.href).pathname);
-    S.forEach(x=>{ if(x.a&&M.audio&&M.audio[x.a]&&!/^data:/.test(M.audio[x.a])) u.push(new URL('../audio/'+M.audio[x.a],location.href).pathname); });
+    S.forEach(x=>{ if(x.a&&M.audio&&M.audio[x.a]&&!/^data:/.test(M.audio[x.a])) u.push(/^\//.test(M.audio[x.a])?M.audio[x.a]:new URL('../audio/'+M.audio[x.a],location.href).pathname); });
     return Array.from(new Set(u)); };
   const b=document.createElement('button'); b.className='pdf-link'; b.style.cssText='cursor:pointer;font-family:inherit;font-size:inherit;margin-inline-start:8px'; head.appendChild(b);
   const fmt=n=>(n/1048576).toFixed(1)+' MB';

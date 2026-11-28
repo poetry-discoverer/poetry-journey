@@ -33,7 +33,7 @@ const CN='poetry-offline',M=window.AUDIO_MANIFEST||{audio:{},pdf:{}},TT=window.T
 const fmt=n=>(n/1048576).toFixed(1)+' MB';
 function pageUrl(id){return new URL('lessons/'+id+'.html',location.href).pathname}
 function urls(id){const u=[pageUrl(id)];const p=M.pdf&&M.pdf[id];if(p)u.push(new URL('pdf/'+p,location.href).pathname);
- Object.keys(M.audio||{}).forEach(k=>{if(k.indexOf(id+'-')===0&&!/^data:/.test(M.audio[k]))u.push(new URL('audio/'+M.audio[k],location.href).pathname)});return u}
+ Object.keys(M.audio||{}).forEach(k=>{if(k.indexOf(id+'-')===0&&!/^data:/.test(M.audio[k]))u.push(/^\//.test(M.audio[k])?M.audio[k]:new URL('audio/'+M.audio[k],location.href).pathname)});return u}
 function netMsg(){const n=document.getElementById('net');n.textContent=navigator.onLine?'':'📴 إنت أوفلاين دلوقتي، والدروس دي شغالة عادي';n.style.color='#b36b00'}
 addEventListener('online',netMsg);addEventListener('offline',netMsg);netMsg();
 async function paint(){
