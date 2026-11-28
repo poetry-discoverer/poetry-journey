@@ -289,3 +289,13 @@ function show(){document.body.appendChild(d);size();addEventListener('resize',si
 setTimeout(function(){if(alive&&!rm)celebrate()},900);tryStart();setTimeout(function(){if(!started)close()},12000);setTimeout(close,45000)}
 if(document.body)show();else addEventListener('DOMContentLoaded',show);
 }catch(e){}})();
+
+/* force-download */
+(function(){try{
+var RX=/\.(pdf|xlsx|mp3|zip|docx)(\?|#|$)/i;
+function fix(a){if(!a||a.dataset.dlx)return;var h=a.getAttribute('href')||'';if(!RX.test(h))return;a.dataset.dlx='1';a.setAttribute('download','');if(a.getAttribute('target')==='_blank')a.removeAttribute('target')}
+function all(r){[].forEach.call((r||document).querySelectorAll('a.pdf-link,a.course-pdf,a.course-audio,a.course-sheet,a.mp3-link,a.mm-link'),fix)}
+function go(){all();new MutationObserver(function(m){all()}).observe(document.body,{childList:true,subtree:true})}
+if(document.body)go();else addEventListener('DOMContentLoaded',go);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.pdf-link');if(a)fix(a)},true);
+}catch(e){}})();
