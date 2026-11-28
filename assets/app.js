@@ -449,9 +449,9 @@ if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(
 var K='site_zoom',z=parseFloat(localStorage.getItem(K))||1;
 function ap(){document.documentElement.style.zoom=z===1?'':String(z)}
 ap();
-function init(){var p=location.pathname;if(!/\/(index\.html)?$/.test(p)||/\/lessons\//.test(p))return;
+function init(){var p=location.pathname,home=/\/(index\.html)?$/.test(p)&&!/\/lessons\//.test(p);
 var tb=document.querySelector('.topbar .wrap');if(!tb||document.getElementById('zbtn'))return;
-var b=document.createElement('button');b.id='zbtn';b.type='button';b.textContent='\u2699\uFE0F \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A';
+var b=document.createElement('button');b.id='zbtn';b.type='button';b.textContent=home?'\u2699\uFE0F \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A':'\u2699\uFE0F Aa';b.setAttribute('aria-label','\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A');
 b.setAttribute('style','margin-inline-start:auto;padding:6px 12px;border-radius:12px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;font-size:.85rem;cursor:pointer;flex:none');
 var pn=document.createElement('div');pn.id='zpanel';pn.hidden=true;
 pn.setAttribute('style','flex:1 1 100%;order:9;display:none;gap:8px;align-items:center;justify-content:center;padding:8px 0;flex-wrap:wrap');
