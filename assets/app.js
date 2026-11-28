@@ -293,7 +293,8 @@ if(document.body)show();else addEventListener('DOMContentLoaded',show);
 /* force-download */
 (function(){try{
 var RX=/\.(pdf|xlsx|mp3|zip|docx)(\?|#|$)/i;
-function fix(a){if(!a||a.dataset.dlx)return;var h=a.getAttribute('href')||'';if(!RX.test(h))return;a.dataset.dlx='1';a.setAttribute('download','');if(a.getAttribute('target')==='_blank')a.removeAttribute('target')}
+function fix(a){if(!a||a.dataset.dlx)return;var h=a.getAttribute('href')||'';if(!RX.test(h))return;a.dataset.dlx='1';a.setAttribute('download','');if(a.getAttribute('target')==='_blank')a.removeAttribute('target');
+if(/\.(pdf|xlsx)(\?|#|$)/i.test(h)&&!a.classList.contains('vw')){var b=document.createElement('a');b.className=a.className.replace(/\bmp3-link\b/,'')+' vw';b.dataset.dlx='1';var u=new URL(h,location.href).href;b.href=/\.xlsx/i.test(h)?'https://docs.google.com/viewer?url='+encodeURIComponent(u):u;b.target='_blank';b.rel='noopener';if(a.getAttribute('dir'))b.setAttribute('dir',a.getAttribute('dir'));b.setAttribute('style',(a.getAttribute('style')||'')+';margin-inline-start:8px');b.textContent='\uD83D\uDC41 \u0641\u062A\u062D';a.parentNode.insertBefore(b,a.nextSibling)}}
 function all(r){[].forEach.call((r||document).querySelectorAll('a.pdf-link,a.course-pdf,a.course-audio,a.course-sheet,a.mp3-link,a.mm-link'),fix)}
 function go(){all();new MutationObserver(function(m){all()}).observe(document.body,{childList:true,subtree:true})}
 if(document.body)go();else addEventListener('DOMContentLoaded',go);
