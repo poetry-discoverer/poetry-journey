@@ -242,3 +242,16 @@ span.en{font-size:inherit;line-height:inherit;color:inherit;border:0;border-radi
 @media (prefers-reduced-motion:reduce){.pconf{display:none}.praise{animation:none}}
 .topbar{transition:transform .22s ease}
 .topbar.tb-hide{transform:translateY(-110%)!important}
+
+/* stepper and header stay usable at high zoom */
+.pl-top .pl-bar.pl-stepper{flex-wrap:wrap;justify-content:center;row-gap:4px}
+.pl-stl{white-space:nowrap;flex:1 1 auto;min-width:0}
+.pl-st{min-width:0;padding:8px 10px;white-space:nowrap;flex:0 1 auto}
+html[style*="zoom"] .lvstrip .wrap,.lvstrip .wrap{flex-wrap:nowrap}
+.lvx,.lvn{white-space:nowrap}
+html[style*="zoom"] .topbar .wrap{padding-top:6px!important;padding-bottom:4px!important;row-gap:4px!important}
+html[style*="zoom"] .topbar .logo{font-size:.85rem!important}
+html[style*="zoom"] .topbar .logo .owl{width:34px!important;height:34px!important;font-size:1.2rem!important}
+html[style*="zoom"] .lvstrip .wrap{gap:6px!important;padding-top:3px!important;padding-bottom:3px!important}
+html[style*="zoom"] .lvx{font-size:.78rem}
+html[style*="zoom"] #srq,html[style*="zoom"] .search input{font-size:.85rem}
