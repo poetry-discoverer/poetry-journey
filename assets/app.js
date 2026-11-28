@@ -384,20 +384,6 @@ if(nm==='alhamdulillah'&&L&&(L.n==='basmala'||L.n==='salawat')&&Date.now()-L.t<8
 window.__lastClip={n:nm,t:Date.now()};if(!this.__lt){this.__lt=1;this.addEventListener('ended',function(){window.__lastClip={n:nm,t:Date.now()}})}
 cur=this;if(/\/(basmala|alhamdulillah)\.mp3/.test(s)&&!this.__ch&&!this.__nc){this.__ch=1;var base=s.replace(/[^\/]*$/,'');this.addEventListener('ended',function(){try{var z=new Audio(base+'salawat.mp3');var q=z.play();if(q&&q.catch)q.catch(function(){})}catch(e){}})}}}catch(e){}return op.apply(this,arguments)}}catch(e){}})();
 
-/* in-app exit button (home page): alhamdulillah through the queue, then close as the platform allows */
-(function(){try{
-var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
-var root=new URL(base+'../',location.href).pathname,p=location.pathname;
-if(!(p===root||p===root+'index.html'))return;
-function mk(){var f=document.querySelector('.footer');if(!f||document.getElementById('exitbtn'))return;
-var b=document.createElement('button');b.id='exitbtn';b.type='button';b.textContent='\u062E\u0631\u0648\u062C \uD83D\uDEAA';
-b.setAttribute('style','display:block;margin:12px auto 4px;padding:10px 26px;border-radius:14px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;cursor:pointer');
-b.addEventListener('click',function(){var done=false;function leave(){if(done)return;done=true;try{window.close()}catch(e){}setTimeout(function(){if(!window.closed){b.textContent='\u0627\u0642\u0641\u0644 \u0627\u0644\u062A\u0637\u0628\u064A\u0642 \u0645\u0646 \u0632\u0631\u0627\u0631 \u0627\u0644\u0647\u0648\u0645 \u0623\u0648 \u0627\u0644\u062A\u0627\u0628'}},400)}
-try{window.__lastClickGuard=1;var a=new Audio(base+'alhamdulillah.mp3');a.addEventListener('ended',function(){setTimeout(leave,3600)});var q=a.play();if(q&&q.catch)q.catch(leave);setTimeout(leave,12000)}catch(e){leave()}});
-f.insertBefore(b,f.firstChild)}
-if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(mk,80)});else setTimeout(mk,80);
-}catch(e){}})();
-
 /* deep search: card-level passages (lesson text, examples, questions, answers), shown under the normal results */
 (function(){try{
 var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
@@ -454,10 +440,6 @@ var tb=null,last=0,tk=false;
 function init(){tb=document.querySelector('.topbar');if(!tb)return;last=window.pageYOffset||0;
 addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(function(){tk=false;var y=window.pageYOffset||0,d=y-last;
 if(y<60){tb.classList.remove('tb-hide')}else if(d>8){tb.classList.add('tb-hide')}else if(d<-8){tb.classList.remove('tb-hide')}
-if(Math.abs(d)>8)last=y})},{passive:true});
-var w=tb.querySelector('.wrap'),f=document.getElementById('exitbtn');
-if(w&&!document.getElementById('exitq')){var p=location.pathname,isHome=/\/(index\.html)?$/.test(p)&&!/\/lessons\//.test(p);
-if(isHome){var b=document.createElement('button');b.id='exitq';b.type='button';b.textContent='\u062E\u0631\u0648\u062C \uD83D\uDEAA';b.setAttribute('style','margin-inline-start:auto;padding:6px 12px;border-radius:12px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;font-size:.85rem;cursor:pointer;flex:none');
-b.addEventListener('click',function(){var e=document.getElementById('exitbtn');if(e)e.click()});w.appendChild(b)}}}
+if(Math.abs(d)>8)last=y})},{passive:true});}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(init,200)});else setTimeout(init,200);
 }catch(e){}})();
