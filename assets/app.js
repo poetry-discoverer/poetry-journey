@@ -377,7 +377,7 @@ else document.addEventListener('click',function(e){try{var l=e.target&&e.target.
 
 /* clip queue guard: our four clips never overlap; a clip requested while another plays is skipped (basmala->salawat chains run on 'ended') */
 (function(){try{var P=HTMLMediaElement.prototype,op=P.play,cur=null;
-P.play=function(){try{var s=this.currentSrc||this.src||'';if(/\/(basmala|salawat|alhamdulillah)\.mp3/.test(s)){
+P.play=function(){try{var s=this.currentSrc||this.src||'';if(/\/praise-\d+\.mp3/.test(s)){var LC=window.__lastClip;if((cur&&!cur.ended&&!cur.paused&&cur.currentTime>0)||(LC&&Date.now()-LC.t<1200)||(window.__praiseCur&&window.__praiseCur!==this&&!window.__praiseCur.ended&&!window.__praiseCur.paused)){return Promise.resolve()}window.__praiseCur=this}if(/\/(basmala|salawat|alhamdulillah)\.mp3/.test(s)){
 if(cur&&cur!==this&&!cur.ended&&!cur.paused&&cur.currentTime>0){return Promise.resolve()}
 var nm=(s.match(/\/(basmala|salawat|alhamdulillah)\.mp3/)||[])[1],L=window.__lastClip;
 if(nm==='alhamdulillah'&&L&&(L.n==='basmala'||L.n==='salawat')&&Date.now()-L.t<8000){return Promise.resolve()}
@@ -442,4 +442,23 @@ addEventListener('scroll',function(){if(tk)return;tk=true;requestAnimationFrame(
 if(y<60){tb.classList.remove('tb-hide')}else if(d>8){tb.classList.add('tb-hide')}else if(d<-8){tb.classList.remove('tb-hide')}
 if(Math.abs(d)>8)last=y})},{passive:true});}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(init,200)});else setTimeout(init,200);
+}catch(e){}})();
+
+/* font/zoom settings: A- / A+ / reset on the home page, remembered, applied on every page */
+(function(){try{
+var K='site_zoom',z=parseFloat(localStorage.getItem(K))||1;
+function ap(){document.documentElement.style.zoom=z===1?'':String(z)}
+ap();
+function init(){var p=location.pathname;if(!/\/(index\.html)?$/.test(p)||/\/lessons\//.test(p))return;
+var tb=document.querySelector('.topbar .wrap');if(!tb||document.getElementById('zbtn'))return;
+var b=document.createElement('button');b.id='zbtn';b.type='button';b.textContent='\u2699\uFE0F \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A';
+b.setAttribute('style','margin-inline-start:auto;padding:6px 12px;border-radius:12px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;font-size:.85rem;cursor:pointer;flex:none');
+var pn=document.createElement('div');pn.id='zpanel';pn.hidden=true;
+pn.setAttribute('style','flex:1 1 100%;order:9;display:none;gap:8px;align-items:center;justify-content:center;padding:8px 0;flex-wrap:wrap');
+function mk(t,f){var x=document.createElement('button');x.type='button';x.textContent=t;x.setAttribute('style','min-width:56px;padding:8px 14px;border-radius:12px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer');x.addEventListener('click',function(){f();z=Math.round(Math.max(.8,Math.min(1.6,z))*100)/100;try{localStorage.setItem(K,String(z))}catch(e){}ap();lb.textContent=Math.round(z*100)+'%'});return x}
+var lb=document.createElement('span');lb.style.cssText='font-weight:800;min-width:48px;text-align:center';lb.textContent=Math.round(z*100)+'%';
+pn.appendChild(mk('A\u2212',function(){z-=.1}));pn.appendChild(lb);pn.appendChild(mk('A+',function(){z+=.1}));pn.appendChild(mk('\u21BA \u0627\u0644\u0623\u0635\u0644',function(){z=1}));
+b.addEventListener('click',function(){var o=pn.style.display==='none';pn.style.display=o?'flex':'none'});
+tb.appendChild(b);tb.appendChild(pn)}
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(init,220)});else setTimeout(init,220);
 }catch(e){}})();
