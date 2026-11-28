@@ -1,12 +1,14 @@
 # extras.py <root>: "ملفات PDF إضافية" section on track-history / track-mythology from the lists below (idempotent). Add new batches to EX.
 import re,sys
 R=sys.argv[1]
-EX={'history':[('الدروس 32 إلى 35: إنجليزي مبسط','history-en-L32-L35.pdf'),('الدروس 32 إلى 35: إنجليزي + مصري','history-combined-L32-L35.pdf'),('الدروس 32 إلى 35: ملخصات','history-summaries-L32-L35.pdf'),
+EX={'history':[('الكورس كامل (الدروس 1 إلى 47): إنجليزي مبسط','history-en-L1-L47.pdf'),('الكورس كامل (الدروس 1 إلى 47): إنجليزي + مصري','history-combined-L1-L47.pdf'),('الكورس كامل (الدروس 1 إلى 47): ملخصات الدروس','history-summaries-L1-L47.pdf'),('الكورس كامل (الدروس 1 إلى 47): ملخص الكورس (إنجليزي وعربي)','history-course-summary-L1-L47.pdf'),
+ ('الدروس 32 إلى 35: إنجليزي مبسط','history-en-L32-L35.pdf'),('الدروس 32 إلى 35: إنجليزي + مصري','history-combined-L32-L35.pdf'),('الدروس 32 إلى 35: ملخصات','history-summaries-L32-L35.pdf'),
  ('الدروس 36 إلى 37: إنجليزي مبسط','history-en-L36-L37.pdf'),('الدروس 36 إلى 37: إنجليزي + مصري','history-combined-L36-L37.pdf'),('الدروس 36 إلى 37: ملخصات','history-summaries-L36-L37.pdf'),
  ('الدروس 38 إلى 39: إنجليزي مبسط','history-en-L38-L39.pdf'),('الدروس 38 إلى 39: إنجليزي + مصري','history-combined-L38-L39.pdf'),('الدروس 38 إلى 39: ملخصات','history-summaries-L38-L39.pdf'),
  ('الدروس 40 إلى 41: إنجليزي مبسط','history-en-L40-L41.pdf'),('الدروس 40 إلى 41: إنجليزي + مصري','history-combined-L40-L41.pdf'),('الدروس 40 إلى 41: ملخصات','history-summaries-L40-L41.pdf'),
  ('الدروس 42 إلى 43: إنجليزي مبسط','history-en-L42-L43.pdf'),('الدروس 42 إلى 43: إنجليزي + مصري','history-combined-L42-L43.pdf'),('الدروس 42 إلى 43: ملخصات','history-summaries-L42-L43.pdf'),
- ('الدروس 44 إلى 45: إنجليزي مبسط','history-en-L44-L45.pdf'),('الدروس 44 إلى 45: إنجليزي + مصري','history-combined-L44-L45.pdf'),('الدروس 44 إلى 45: ملخصات','history-summaries-L44-L45.pdf')],
+ ('الدروس 44 إلى 45: إنجليزي مبسط','history-en-L44-L45.pdf'),('الدروس 44 إلى 45: إنجليزي + مصري','history-combined-L44-L45.pdf'),('الدروس 44 إلى 45: ملخصات','history-summaries-L44-L45.pdf'),
+ ('الدروس 46 إلى 47: إنجليزي مبسط','history-en-L46-L47.pdf'),('الدروس 46 إلى 47: إنجليزي + مصري','history-combined-L46-L47.pdf'),('الدروس 46 إلى 47: ملخصات','history-summaries-L46-L47.pdf')],
  'mythology':[('الموديولات 1 إلى 8: إنجليزي مبسط (A2-B1)','myth-m01-m08-English-A2B1.pdf'),('الموديولات 1 إلى 8: إنجليزي + عربي','myth-m01-m08-English-Arabic.pdf'),
  ('الموديولات 9 إلى 11: إنجليزي مبسط (A2-B1)','myth-m09-m11-English-A2B1.pdf'),('الموديولات 9 إلى 11: إنجليزي + عربي','myth-m09-m11-English-Arabic.pdf'),
  ('الموديولان 12 و13: إنجليزي مبسط (A2-B1)','myth-m12-m13-English-A2B1.pdf'),('الموديولان 12 و13: إنجليزي + عربي','myth-m12-m13-English-Arabic.pdf'),
@@ -16,7 +18,9 @@ EX={'history':[('الدروس 32 إلى 35: إنجليزي مبسط','history-en
  ('الموديولان 20 و21: إنجليزي مبسط (A2-B1)','myth-m20-m21-English-A2B1.pdf'),('الموديولان 20 و21: إنجليزي + عربي','myth-m20-m21-English-Arabic.pdf'),
  ('الموديولان 22 و23: إنجليزي مبسط (A2-B1)','myth-m22-m23-English-A2B1.pdf'),('الموديولان 22 و23: إنجليزي + عربي','myth-m22-m23-English-Arabic.pdf'),
  ('الموديولان 24 و25: إنجليزي مبسط (A2-B1)','myth-m24-m25-English-A2B1.pdf'),('الموديولان 24 و25: إنجليزي + عربي','myth-m24-m25-English-Arabic.pdf'),
- ('الموديولان 26 و27: إنجليزي مبسط (A2-B1)','myth-m26-m27-English-A2B1.pdf'),('الموديولان 26 و27: إنجليزي + عربي','myth-m26-m27-English-Arabic.pdf')]}
+ ('الموديولان 26 و27: إنجليزي مبسط (A2-B1)','myth-m26-m27-English-A2B1.pdf'),('الموديولان 26 و27: إنجليزي + عربي','myth-m26-m27-English-Arabic.pdf'),
+ ('الموديول 28: إنجليزي مبسط (A2-B1)','myth-m28-English-A2B1.pdf'),('الموديول 28: إنجليزي + عربي','myth-m28-English-Arabic.pdf')],
+ 'poetry':[('تحليل القصائد، الدروس 1 و2: إنجليزي مبسط (A2-B1)','poetry-01-02-English-A2B1.pdf'),('تحليل القصائد، الدروس 1 و2: إنجليزي + عربي','poetry-01-02-English-Arabic.pdf'),('تحليل القصائد، الدروس 3 و4: إنجليزي مبسط (A2-B1)','poetry-03-04-English-A2B1.pdf'),('تحليل القصائد، الدروس 3 و4: إنجليزي + عربي','poetry-03-04-English-Arabic.pdf'),('تحليل القصائد، الدروس 5 و6: إنجليزي مبسط (A2-B1)','poetry-05-06-English-A2B1.pdf'),('تحليل القصائد، الدروس 5 و6: إنجليزي + عربي','poetry-05-06-English-Arabic.pdf'),('تحليل القصائد، الدروس 7 و8: إنجليزي مبسط (A2-B1)','poetry-07-08-English-A2B1.pdf'),('تحليل القصائد، الدروس 7 و8: إنجليزي + عربي','poetry-07-08-English-Arabic.pdf'),('تحليل القصائد، الدروس 9 و10: إنجليزي مبسط (A2-B1)','poetry-09-10-English-A2B1.pdf'),('تحليل القصائد، الدروس 9 و10: إنجليزي + عربي','poetry-09-10-English-Arabic.pdf'),('تحليل القصائد، الدروس 11 و12: إنجليزي مبسط (A2-B1)','poetry-11-12-English-A2B1.pdf'),('تحليل القصائد، الدروس 11 و12: إنجليزي + عربي','poetry-11-12-English-Arabic.pdf'),('تحليل القصائد، الدروس 13 و14: إنجليزي مبسط (A2-B1)','poetry-13-14-English-A2B1.pdf'),('تحليل القصائد، الدروس 13 و14: إنجليزي + عربي','poetry-13-14-English-Arabic.pdf')]}
 for t,L in EX.items():
     f=f'{R}/track-{t}.html';s=open(f,encoding='utf-8').read()
     s=re.sub(r'<div class="extra-files">.*?</div>\n?','',s,flags=re.S)
