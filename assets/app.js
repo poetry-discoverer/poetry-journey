@@ -230,7 +230,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 /* welcome-splash */
 (function(){try{
-if(sessionStorage.getItem('wlc2'))return; sessionStorage.setItem('wlc2','1');
+if(sessionStorage.getItem('wlc2'))return; sessionStorage.setItem('wlc2','1');window.__wlcSplash=true;
 var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 var css='#wlc{position:fixed;inset:0;z-index:99999;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;padding:20px;background:radial-gradient(ellipse at 50% 30%,#2b6df0 0%,#1b2a8a 45%,#0b1040 100%);transition:opacity .6s;perspective:900px;-webkit-tap-highlight-color:transparent}#wlc.out{opacity:0}'
 +'#wlc .rays{position:absolute;left:50%;top:34%;width:170vmax;height:170vmax;margin:-85vmax 0 0 -85vmax;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.13) 0 6deg,transparent 6deg 18deg);-webkit-mask:radial-gradient(circle,#000 0,transparent 55%);mask:radial-gradient(circle,#000 0,transparent 55%);'+(rm?'':'animation:wspin 40s linear infinite')+'}'
@@ -274,8 +274,8 @@ function fanfare(){if(played)return;try{var AC=window.AudioContext||window.webki
 [523.25,659.25,783.99].forEach(function(f){tone(f,t+.5,1.3,'sawtooth',.05)});
 var n=ac.sampleRate*.25,b=ac.createBuffer(1,n,ac.sampleRate),dd=b.getChannelData(0);for(var i=0;i<n;i++)dd[i]=(Math.random()*2-1)*Math.pow(1-i/n,3);var s=ac.createBufferSource(),g=ac.createGain();s.buffer=b;g.gain.value=.25;s.connect(g);g.connect(ac.destination);s.start(t+.5)}catch(e){}}
 function celebrate(){var x=W/2;burst(x,H*.3,120,9);setTimeout(function(){burst(W*.2,H*.45,60,8);burst(W*.8,H*.45,60,8)},250)}
-var vs=[2,3].map(function(n){var a=new Audio(base+'welcome-'+n+'.mp3');a.preload='auto';return a}),started=false,finished=false,sk=d.querySelector('.sk');
-function stopVoice(){vs.forEach(function(a){try{a.pause()}catch(e){}})}
+var vs=['basmala.mp3','welcome-2.mp3','welcome-3.mp3'].map(function(n){var a=new Audio(base+n);a.preload='auto';return a}),started=false,finished=false,sk=d.querySelector('.sk');
+function stopVoice(){vs.forEach(function(a,i){if(i===0)return;try{a.pause()}catch(e){}})}
 function close(){if(!d.parentNode)return;alive=false;stopVoice();cancelAnimationFrame(raf);d.classList.add('out');setTimeout(function(){d.remove();st.remove();try{ac&&ac.close()}catch(e){}},600)}
 function chain(i){if(!alive)return;if(i>=vs.length){finished=true;if(!rm)celebrate();fanfare();setTimeout(close,3500);return}var a=vs[i];a.onended=function(){setTimeout(function(){chain(i+1)},350)};a.play().catch(function(){chain(i+1)})}
 function tryStart(){if(started)return;var p=vs[0].play();if(p&&p.then){p.then(function(){started=true;sk.textContent='tap to skip';vs[0].onended=function(){setTimeout(function(){chain(1)},350)}}).catch(function(){sk.textContent='\u0627\u0636\u063A\u0637 \u0641\u064A \u0623\u064A \u0645\u0643\u0627\u0646 \u0644\u062A\u0634\u063A\u064A\u0644 \u0627\u0644\u0635\u0648\u062A \u00b7 tap for sound'})}else{started=true;vs[0].onended=function(){setTimeout(function(){chain(1)},350)}}}
@@ -288,6 +288,23 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
 function show(){document.body.appendChild(d);size();addEventListener('resize',size);if(!rm){raf=requestAnimationFrame(tick)}
 setTimeout(function(){if(alive&&!rm)celebrate()},900);tryStart();setTimeout(function(){if(!started)close()},12000);setTimeout(close,45000)}
 if(document.body)show();else addEventListener('DOMContentLoaded',show);
+}catch(e){}})();
+
+/* basmala-on-entry + credit */
+(function(){try{
+var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
+var p=location.pathname;
+function credit(){var f=document.querySelector('.footer');if(!f||f.querySelector('.bsm-credit'))return;var c=document.createElement('div');c.className='bsm-credit';c.setAttribute('style','margin-top:6px;font-size:.8rem;opacity:.75');c.textContent='\u0628\u0633\u0645\u0644\u0629 \u0628\u0635\u0648\u062A \u0645\u0634\u0627\u0631\u064A \u0627\u0644\u0639\u0641\u0627\u0633\u064A - everyayah.com';f.appendChild(c)}
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',credit);else credit();
+if(!/(\/|index\.html|track-[^\/]*\.html|modules-tefl[^\/]*\.html)$/.test(p))return;
+var EV=['pointerdown','touchstart','keydown','click'];
+function run(){if(window.__wlcSplash)return;var a=new Audio(base+'basmala.mp3');a.preload='auto';var done=false;
+function off(){done=true;EV.forEach(function(t){document.removeEventListener(t,go,true)})}
+function go(){if(done)return;var q;try{q=a.play()}catch(e){off();return}if(q&&q.then)q.then(off).catch(function(){});else off()}
+function arm(){EV.forEach(function(t){document.addEventListener(t,go,true)})}
+var q;try{q=a.play()}catch(e){q=null}
+if(q&&q.then){q.then(function(){done=true}).catch(arm)}else if(!q){arm()}}
+setTimeout(run,60);
 }catch(e){}})();
 
 /* force-download */
