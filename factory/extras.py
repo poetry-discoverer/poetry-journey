@@ -3,7 +3,8 @@ import re,sys
 R=sys.argv[1]
 EX={'history':[('الدروس 32 إلى 35: إنجليزي مبسط','history-en-L32-L35.pdf'),('الدروس 32 إلى 35: إنجليزي + مصري','history-combined-L32-L35.pdf'),('الدروس 32 إلى 35: ملخصات','history-summaries-L32-L35.pdf'),
  ('الدروس 36 إلى 37: إنجليزي مبسط','history-en-L36-L37.pdf'),('الدروس 36 إلى 37: إنجليزي + مصري','history-combined-L36-L37.pdf'),('الدروس 36 إلى 37: ملخصات','history-summaries-L36-L37.pdf'),
- ('الدروس 38 إلى 39: إنجليزي مبسط','history-en-L38-L39.pdf'),('الدروس 38 إلى 39: إنجليزي + مصري','history-combined-L38-L39.pdf'),('الدروس 38 إلى 39: ملخصات','history-summaries-L38-L39.pdf')],
+ ('الدروس 38 إلى 39: إنجليزي مبسط','history-en-L38-L39.pdf'),('الدروس 38 إلى 39: إنجليزي + مصري','history-combined-L38-L39.pdf'),('الدروس 38 إلى 39: ملخصات','history-summaries-L38-L39.pdf'),
+ ('الدروس 40 إلى 41: إنجليزي مبسط','history-en-L40-L41.pdf'),('الدروس 40 إلى 41: إنجليزي + مصري','history-combined-L40-L41.pdf'),('الدروس 40 إلى 41: ملخصات','history-summaries-L40-L41.pdf')],
  'mythology':[('الموديولات 1 إلى 8: إنجليزي مبسط (A2-B1)','myth-m01-m08-English-A2B1.pdf'),('الموديولات 1 إلى 8: إنجليزي + عربي','myth-m01-m08-English-Arabic.pdf'),
  ('الموديولات 9 إلى 11: إنجليزي مبسط (A2-B1)','myth-m09-m11-English-A2B1.pdf'),('الموديولات 9 إلى 11: إنجليزي + عربي','myth-m09-m11-English-Arabic.pdf'),
  ('الموديولان 12 و13: إنجليزي مبسط (A2-B1)','myth-m12-m13-English-A2B1.pdf'),('الموديولان 12 و13: إنجليزي + عربي','myth-m12-m13-English-Arabic.pdf'),
