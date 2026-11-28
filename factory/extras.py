@@ -54,6 +54,18 @@ for f in sorted(glob.glob(R+'/pdf/extra/analysis-[0-9]*-English-A2B1.pdf')):
     m=re.match(r'analysis-(\d+)(?:-(\d+))?-English',os.path.basename(f));a,b=m.groups();sfx=f'{a}-{b}' if b else a
     tt=f'الدروس {int(a)} و{int(b)}' if b else f'الدرس {int(a)}'
     EX['analysis']+=[(f'التحليل الأدبي، {tt}: إنجليزي مبسط (A2-B1)',f'analysis-{sfx}-English-A2B1.pdf'),(f'التحليل الأدبي، {tt}: إنجليزي + عربي',f'analysis-{sfx}-English-Arabic.pdf')]
+
+def _rng(t):
+    out=[]
+    for f in glob.glob(R+f'/pdf/extra/{t}-en-L*.pdf'):
+        m=re.match(rf'{t}-en-L(\d+)(?:-L(\d+))?\.pdf',os.path.basename(f));out.append((int(m.group(1)),int(m.group(2) or m.group(1)),os.path.basename(f)[len(t)+4:-4]))
+    return sorted(out)
+for t,ar in [('psy','psycholinguistics'),('essay','essay'),('skills','skills'),('lt','lt')]:
+    nm={'psy':'علم اللغة النفسي','essay':'الإنشاء','skills':'المهارات','lt':'نظرية الأدب'}[t]
+    EX[ar]=[]
+    for a,b,r in _rng(t):
+        tt=f'الدروس {a} إلى {b}' if a!=b else f'الدرس {a}'
+        EX[ar]+=[(f'{nm}، {tt}: إنجليزي مبسط',f'{t}-en-{r}.pdf'),(f'{nm}، {tt}: إنجليزي + مصري',f'{t}-combined-{r}.pdf'),(f'{nm}، {tt}: ملخصات',f'{t}-summaries-{r}.pdf')]
 for t,L in EX.items():
     f=f'{R}/track-{t}.html';s=open(f,encoding='utf-8').read()
     s=re.sub(r'<div class="extra-files">.*?</div>\n?','',s,flags=re.S)
