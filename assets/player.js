@@ -214,7 +214,7 @@ function render0(){
   else if(s.t==='end'){
     const pdf=M.pdf&&M.pdf[LID];
     h+='<div class="big">🏆</div><h2>برافو! خلصت الدرس</h2><div class="xps">⭐ كسبت '+gained+' نقطة في الدرس ده</div>';
-    h+=pdf?'<a class="pl-btn2" href="../pdf/'+pdf+'" target="_blank" rel="noopener">📄 حمّل PDF الدرس كامل بالتمارين</a>':'<div class="pl-btn2 off">📄 PDF الدرس كامل بالتمارين — قريبًا</div>';
+    h+=pdf?'<a class="pl-btn2" href="/poetry-journey-pdf/pdf/'+pdf+'" target="_blank" rel="noopener">📄 حمّل PDF الدرس كامل بالتمارين</a>':'<div class="pl-btn2 off">📄 PDF الدرس كامل بالتمارين — قريبًا</div>';
     if(s.teaser) h+='<div class="pl-text" style="font-size:20px;line-height:1.9;margin:8px 0">'+s.teaser+'</div>';
     h+='<button class="pl-next" id="plfin">أنهي الدرس ✅</button><button class="pl-btn2" id="plrest">↺ ابدأ الدرس من الأول</button>';
     if(s.extra) h+='<div class="pl-src">'+s.extra+'</div>';
@@ -275,7 +275,7 @@ render();
 (function(){ if(!('caches' in window)) return; const head=document.getElementById('lhead'); if(!head) return;
   const SITE=({'poetry-journey':'poetry-offline','learn-tefl':'tefl-offline','tefl-practical':'tefl2-offline'})[location.pathname.split('/')[1]]||'poetry-offline'
   const CN=SITE;
-  const urls=()=>{ const u=[location.pathname]; const pdf=M.pdf&&M.pdf[LID]; if(pdf) u.push(new URL('../pdf/'+pdf,location.href).pathname);
+  const urls=()=>{ const u=[location.pathname]; const pdf=M.pdf&&M.pdf[LID]; if(pdf) u.push(new URL('/poetry-journey-pdf/pdf/'+pdf,location.href).pathname);
     S.forEach(x=>{ if(x.a&&M.audio&&M.audio[x.a]&&!/^data:/.test(M.audio[x.a])) u.push(/^\//.test(M.audio[x.a])?M.audio[x.a]:new URL('../audio/'+M.audio[x.a],location.href).pathname); });
     return Array.from(new Set(u)); };
   const b=document.createElement('button'); b.className='pdf-link'; b.style.cssText='cursor:pointer;font-family:inherit;font-size:inherit;margin-inline-start:8px'; head.appendChild(b);

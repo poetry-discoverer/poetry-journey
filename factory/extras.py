@@ -27,15 +27,33 @@ for a,b in _P:
     sfx=f'{a}-{b}' if b else a;tt=f'الدروس {int(a)} و{int(b)}' if b else f'الدرس {int(a)}'
     EX['poetry']+=[(f'تحليل القصائد، {tt}: إنجليزي مبسط (A2-B1)',f'poetry-{sfx}-English-A2B1.pdf'),(f'تحليل القصائد، {tt}: إنجليزي + عربي',f'poetry-{sfx}-English-Arabic.pdf')]
 EX['grammar-c2']=[]
-for r,t in [('L01-L04','1 إلى 4'),('L05-L06','5 و6'),('L07-L09','7 إلى 9'),('L10-L12','10 إلى 12'),('L13-L15','13 إلى 15'),('L16-L18','16 إلى 18'),('L19-L21','19 إلى 21'),('L22-L24','22 إلى 24'),('L25-L26','25 و26'),('L27-L29','27 إلى 29'),('L30-L32','30 إلى 32'),('L33-L35','33 إلى 35'),('L36-L38','36 إلى 38')]:
+for r,t in [('L01-L04','1 إلى 4'),('L05-L06','5 و6'),('L07-L09','7 إلى 9'),('L10-L12','10 إلى 12'),('L13-L15','13 إلى 15'),('L16-L18','16 إلى 18'),('L19-L21','19 إلى 21'),('L22-L24','22 إلى 24'),('L25-L26','25 و26'),('L27-L29','27 إلى 29'),('L30-L32','30 إلى 32'),('L33-L35','33 إلى 35'),('L36-L38','36 إلى 38'),('L39-L41','39 إلى 41'),('L42-L44','42 إلى 44'),('L45-L46','45 و46')]:
     EX['grammar-c2']+=[(f'القواعد المتقدمة، الدروس {t}: إنجليزي مبسط',f'grammar-c2-en-{r}.pdf'),(f'القواعد المتقدمة، الدروس {t}: إنجليزي + مصري',f'grammar-c2-combined-{r}.pdf'),(f'القواعد المتقدمة، الدروس {t}: ملخصات الدروس',f'grammar-c2-summaries-{r}.pdf')]
+EX['grammar-c2']=[(f'القواعد المتقدمة، الكورس كامل (1 إلى 46): {n}',f'grammar-c2-{k}-L01-L46.pdf') for k,n in [('en','إنجليزي مبسط'),('combined','إنجليزي + مصري'),('summaries','ملخصات الدروس')]]+EX['grammar-c2']
 EX['comp']=[]
-for r,t in [('01','1'),('02-05','2 إلى 5'),('06-09','6 إلى 9'),('10-13','10 إلى 13'),('14-18','14 إلى 18')]:
+for r,t in [('01','1'),('02-05','2 إلى 5'),('06-09','6 إلى 9'),('10-13','10 إلى 13'),('14-18','14 إلى 18'),('19-22','19 إلى 22')]:
     EX['comp']+=[(f'الفهم والقراءة، الدروس {t}: إنجليزي مبسط',f'comp-en-{r}.pdf'),(f'الفهم والقراءة، الدروس {t}: إنجليزي + مصري',f'comp-combined-{r}.pdf'),(f'الفهم والقراءة، الدروس {t}: ملخصات',f'comp-summaries-{r}.pdf')]
 EX['history']+=[('الدروس 48 إلى 52: إنجليزي مبسط','history-en-L48-L52.pdf'),('الدروس 48 إلى 52: إنجليزي + مصري','history-combined-L48-L52.pdf'),('الدروس 48 إلى 52: ملخصات','history-summaries-L48-L52.pdf'),('الدروس 53 إلى 55: إنجليزي مبسط','history-en-L53-L55.pdf'),('الدروس 53 إلى 55: إنجليزي + مصري','history-combined-L53-L55.pdf'),('الدروس 53 إلى 55: ملخصات','history-summaries-L53-L55.pdf'),('الدروس 101 إلى 104: إنجليزي مبسط','history-en-L101-L104.pdf'),('الدروس 101 إلى 104: إنجليزي + مصري','history-combined-L101-L104.pdf'),('الدروس 101 إلى 104: ملخصات','history-summaries-L101-L104.pdf')]
-EX['grammar']=[('القواعد، الدروس 1 و2: إنجليزي مبسط (A2-B1)','grammar-01-02-English-A2B1.pdf'),('القواعد، الدروس 1 و2: إنجليزي + عربي','grammar-01-02-English-Arabic.pdf')]
+EX['grammar']=[]
+for f in sorted(glob.glob(R+'/pdf/extra/grammar-[0-9]*-English-A2B1.pdf')):
+    m=re.match(r'grammar-(\d+)(?:-(\d+))?-English',os.path.basename(f));a,b=m.groups();sfx=f'{a}-{b}' if b else a
+    tt=f'الدروس {int(a)} إلى {int(b)}' if b else f'الدرس {int(a)}'
+    EX['grammar']+=[(f'القواعد، {tt}: إنجليزي مبسط (A2-B1)',f'grammar-{sfx}-English-A2B1.pdf'),(f'القواعد، {tt}: إنجليزي + عربي',f'grammar-{sfx}-English-Arabic.pdf')]
 for t,ar in [('essay','الإنشاء'),('skills','المهارات')]:
-    EX[t]=[(f'{ar}، الدروس 1 إلى 3: إنجليزي مبسط',f'{t}-en-L01-L03.pdf'),(f'{ar}، الدروس 1 إلى 3: إنجليزي + مصري',f'{t}-combined-L01-L03.pdf'),(f'{ar}، الدروس 1 إلى 3: ملخصات',f'{t}-summaries-L01-L03.pdf')]
+    EX[t]=[]
+    for r,tt in [('L01-L03','1 إلى 3'),('L04-L06','4 إلى 6'),('L07-L09','7 إلى 9')]:
+        EX[t]+=[(f'{ar}، الدروس {tt}: إنجليزي مبسط',f'{t}-en-{r}.pdf'),(f'{ar}، الدروس {tt}: إنجليزي + مصري',f'{t}-combined-{r}.pdf'),(f'{ar}، الدروس {tt}: ملخصات',f'{t}-summaries-{r}.pdf')]
+EX['lt']=[]
+for r,tt in [('L1-L4','1 إلى 4'),('L5-L8','5 إلى 8'),('L9-L12','9 إلى 12')]:
+    EX['lt']+=[(f'نظرية الأدب، الدروس {tt}: إنجليزي مبسط',f'lt-en-{r}.pdf'),(f'نظرية الأدب، الدروس {tt}: إنجليزي + مصري',f'lt-combined-{r}.pdf'),(f'نظرية الأدب، الدروس {tt}: ملخصات',f'lt-summaries-{r}.pdf')]
+EX['psycholinguistics']=[]
+for r,tt in [('L01-L03','1 إلى 3')]:
+    EX['psycholinguistics']+=[(f'علم اللغة النفسي، الدروس {tt}: إنجليزي مبسط',f'psy-en-{r}.pdf'),(f'علم اللغة النفسي، الدروس {tt}: إنجليزي + مصري',f'psy-combined-{r}.pdf'),(f'علم اللغة النفسي، الدروس {tt}: ملخصات',f'psy-summaries-{r}.pdf')]
+EX['analysis']=[]
+for f in sorted(glob.glob(R+'/pdf/extra/analysis-[0-9]*-English-A2B1.pdf')):
+    m=re.match(r'analysis-(\d+)(?:-(\d+))?-English',os.path.basename(f));a,b=m.groups();sfx=f'{a}-{b}' if b else a
+    tt=f'الدروس {int(a)} و{int(b)}' if b else f'الدرس {int(a)}'
+    EX['analysis']+=[(f'التحليل الأدبي، {tt}: إنجليزي مبسط (A2-B1)',f'analysis-{sfx}-English-A2B1.pdf'),(f'التحليل الأدبي، {tt}: إنجليزي + عربي',f'analysis-{sfx}-English-Arabic.pdf')]
 for t,L in EX.items():
     f=f'{R}/track-{t}.html';s=open(f,encoding='utf-8').read()
     s=re.sub(r'<div class="extra-files">.*?</div>\n?','',s,flags=re.S)
