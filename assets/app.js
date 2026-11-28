@@ -296,9 +296,9 @@ var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return
 var p=location.pathname;
 function credit(){var f=document.querySelector('.footer');if(!f||f.querySelector('.bsm-credit'))return;var c=document.createElement('div');c.className='bsm-credit';c.setAttribute('style','margin-top:6px;font-size:.8rem;opacity:.75');c.textContent='\u0628\u0633\u0645\u0644\u0629 \u0628\u0635\u0648\u062A \u0645\u0634\u0627\u0631\u064A \u0627\u0644\u0639\u0641\u0627\u0633\u064A - everyayah.com';f.appendChild(c)}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',credit);else credit();
-if(!/(\/|index\.html|offline\.html|studied\.html|progress\.html|review\.html|exams\.html|glossary\.html|track-[^\/]*\.html|module[^\/]*\.html)$/.test(p))return;
+if(!/(\/|index\.html|offline\.html|studied\.html|progress\.html|review\.html|exam\.html|exams\.html|glossary\.html|track-[^\/]*\.html|module[^\/]*\.html|lessons\/[^\/]*\.html)$/.test(p))return;
 var EV=['pointerdown','touchstart','keydown','click'];
-function run(){if(window.__wlcSplash)return;var a=new Audio(base+'basmala.mp3');a.preload='auto';var done=false;
+function run(){if(window.__wlcSplash)return;var a=new Audio(base+'basmala.mp3');a.preload='auto';var done=false;if(/track-|module|\/lessons\//.test(p)){a.addEventListener('ended',function(){try{var s=new Audio(base+'salawat.mp3');var q=s.play();if(q&&q.catch)q.catch(function(){})}catch(e){}})}
 function off(){done=true;EV.forEach(function(t){document.removeEventListener(t,go,true)})}
 function go(){if(done)return;var q;try{q=a.play()}catch(e){off();return}if(q&&q.then)q.then(off).catch(function(){});else off()}
 function arm(){EV.forEach(function(t){document.addEventListener(t,go,true)})}
@@ -374,3 +374,9 @@ function arm(){if(armed)return;armed=true;var f=function(){EVS.forEach(function(
 go()}}
 else document.addEventListener('click',function(e){try{var l=e.target&&e.target.closest&&e.target.closest('a[href]');if(!l)return;var u=new URL(l.href,location.href);if(u.origin===location.origin&&isHome(u.pathname)&&!l.hasAttribute('download')&&l.target!=='_blank'){try{sessionStorage.setItem('hamdHome',String(Date.now()))}catch(x){}}}catch(x){}},true);
 }catch(e){}})();
+
+/* clip queue guard: our four clips never overlap; a clip requested while another plays is skipped (basmala->salawat chains run on 'ended') */
+(function(){try{var P=HTMLMediaElement.prototype,op=P.play,cur=null;
+P.play=function(){try{var s=this.currentSrc||this.src||'';if(/\/(basmala|salawat|alhamdulillah)\.mp3/.test(s)){
+if(cur&&cur!==this&&!cur.ended&&!cur.paused&&cur.currentTime>0){return Promise.resolve()}
+cur=this}}catch(e){}return op.apply(this,arguments)}}catch(e){}})();

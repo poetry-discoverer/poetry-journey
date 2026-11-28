@@ -11,7 +11,7 @@ function srRight(id){ const s=S(), r=s.sr[id]; if(!r) return; if(r.st===0){ s.sr
 function shuf(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function prep(b){ const ms=Array.isArray(b.a); const ix=shuf(b.o.map((_,i)=>i)); if(b.o.length===2||b.type==='tf') ix.sort((x,y)=>x-y); return {b, ix, ms, a:ms?b.a.map(x=>ix.indexOf(x)).sort((x,y)=>x-y):ix.indexOf(b.a)}; }
 function el(h){ root.innerHTML=h; window.scrollTo(0,0); }
-const NAMES={tefl:'TEFL',tefl2:'TEFL',poetry:'الشعر',intensive:'المنهج النقدي',analysis:'تحليل القصائد',grammar:'القواعد',all:'كل الأسئلة',myth:'الأساطير',history:'تاريخ الشعر'};
+const NAMES={tefl:'TEFL',tefl2:'TEFL',poetry:'الشعر',intensive:'المنهج النقدي',analysis:'تحليل القصائد',grammar:'القواعد',all:'كل الأسئلة',myth:'الأساطير',history:'تاريخ الشعر',comp:'الأدب المقارن',lt:'نظرية الأدب',essay:'كتابة المقالة',skills:'مهارات اللغة'};
 let sfxOn=function(k){ };
 function tone(f,t,d){ try{ const c=new (window.AudioContext||window.webkitAudioContext)(), o=c.createOscillator(), g=c.createGain(); o.type='triangle'; o.frequency.value=f; g.gain.value=.12; o.connect(g); g.connect(c.destination); o.start(c.currentTime+t); o.stop(c.currentTime+t+d); }catch(e){} }
 const snd={right(){ if(window.CHIP) CHIP.right(); }, wrong(){ if(window.CHIP) CHIP.wrong(); }};
@@ -102,7 +102,7 @@ function fixedExam(e){ const n=e.items.length, secs=(e.minutes||Math.ceil(n*0.75
 // ---- spaced review
 
 // ---- exam on what the student studied (local progress only)
-const CN={poetry:'الشعر',myth:'الأساطير',history:'تاريخ الأدب',analysis:'تحليل القصائد',intensive:'النقد',grammar:'القواعد',psy:'علم النفس',verb:'الأفعال',phrasal:'Phrasal verbs',collocations:'Collocations'};
+const CN={poetry:'الشعر',myth:'الأساطير',history:'تاريخ الأدب',analysis:'تحليل القصائد',intensive:'النقد',grammar:'القواعد',psy:'علم النفس',verb:'الأفعال',phrasal:'Phrasal verbs',collocations:'Collocations',comp:'الأدب المقارن',lt:'نظرية الأدب',essay:'كتابة المقالة',skills:'مهارات اللغة'};
 function studiedMap(){ const s=S(), m={}; const sx=s.sx||{};
   Object.keys(s.done||{}).forEach(l=>m[l]=1e9);
   Object.keys(s.steps||{}).forEach(l=>{ if((s.steps[l]||0)>0) m[l]=Math.max(m[l]||0,s.steps[l]); });

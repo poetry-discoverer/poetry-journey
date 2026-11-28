@@ -2,7 +2,7 @@
 var sc=document.currentScript||document.querySelector('script[src*="search.js"]');var base=sc.src.replace(/search\.js.*$/,'');
 var root=base.replace(/assets\/$/,'');
 function norm(s){s=String(s||'').toLowerCase().replace(/[\u064b-\u0652\u0670\u0640]/g,'');return s.replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه')}
-var NAMES={poetry:'الشعر',myth:'الأساطير',history:'تاريخ الشعر',intensive:'النقد',analysis:'تحليل القصائد',grammar:'القواعد',tefl:'TEFL',psy:'Psycholinguistics'};
+var NAMES={poetry:'الشعر',myth:'الأساطير',history:'تاريخ الشعر',intensive:'النقد',analysis:'تحليل القصائد',grammar:'القواعد',tefl:'TEFL',psy:'Psycholinguistics',lt:'نظرية الأدب',essay:'كتابة المقالة',skills:'مهارات اللغة',comp:'الأدب المقارن'};
 var DATA=null,loading=false;
 function prep(d){d.L.forEach(function(l){l.nt=norm(l.t);l.nh=norm(l.h.join(' '));l.nb=norm(l.b)});d.G.forEach(function(g){g.n=norm(g.t+' '+g.a+' '+g.d)});return d}
 function fail(){loading=false;box.innerHTML='<p class="sr-empty">البحث محتاج إنترنت أول مرة.</p>'}
