@@ -5,7 +5,7 @@ function state(){ try{return JSON.parse(localStorage.getItem(LS_KEY))||{done:{},
 function dayKey(d){ d=d||new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function touchStreak(s){ const t=dayKey(), y=dayKey(new Date(Date.now()-864e5)); const k=s.streak||(s.streak={n:0,last:'',best:0});
   if(k.last===t) return; k.n=(k.last===y)?k.n+1:1; k.last=t; k.best=Math.max(k.best||0,k.n); }
-function levelOf(xp){ const L=Math.floor(Math.sqrt(Math.max(0,xp)/50))+1, lo=50*(L-1)*(L-1), hi=50*L*L; return {L,lo,hi,pct:Math.round((xp-lo)/(hi-lo)*100)}; }
+function levelOf(xp){ const L=Math.floor(Math.sqrt(Math.max(0,xp)/200))+1, lo=200*(L-1)*(L-1), hi=200*L*L; return {L,lo,hi,pct:Math.round((xp-lo)/(hi-lo)*100)}; }
 const BADGES=[
  {id:'st3',e:'🔥',t:'٣ أيام ورا بعض',f:s=>(s.streak&&s.streak.best||0)>=3},
  {id:'st7',e:'🔥',t:'أسبوع كامل',f:s=>(s.streak&&s.streak.best||0)>=7},
@@ -24,7 +24,7 @@ const BADGES=[
  {id:'exam',e:'🧪',t:'أول امتحان',f:s=>Object.keys(s.exams||{}).length>=1}
 ];
 window.__toasts=window.__toasts||[];
-function dailyAdd(s,d){ const t=dayKey(); if(!s.daily||s.daily.d!==t) s.daily={d:t,xp:0,hit:false}; s.daily.xp+=d; if(!s.daily.hit&&s.daily.xp>=(s.goal||50)){ s.daily.hit=true; s.goalHit=true; window.__toasts.push('🎯 خلصت هدف النهارده!'); } }
+function dailyAdd(s,d){ const t=dayKey(); if(!s.daily||s.daily.d!==t) s.daily={d:t,xp:0,hit:false}; s.daily.xp+=d; if(!s.daily.hit&&s.daily.xp>=(s.goal||200)){ s.daily.hit=true; s.goalHit=true; window.__toasts.push('🎯 خلصت هدف النهارده!'); } }
 function awardBadges(s){ s.badges=s.badges||{}; BADGES.forEach(b=>{ if(!s.badges[b.id]&&b.f(s)){ s.badges[b.id]=Date.now(); window.__toasts.push(b.e+' وسام جديد: '+b.t); } }); }
 function flushToasts(){ const q=window.__toasts.splice(0); if(!q.length) return; let box=document.getElementById('toasts'); if(!box){ box=document.createElement('div'); box.id='toasts'; box.setAttribute('role','status'); box.setAttribute('aria-live','polite'); document.body.appendChild(box); }
   q.forEach((m,i)=>setTimeout(()=>{ const d=document.createElement('div'); d.className='toast'; d.textContent=m; box.appendChild(d); setTimeout(()=>d.remove(),3800); },i*900)); }
@@ -55,7 +55,7 @@ function refreshHeader(){
     document.querySelectorAll('.pill.streak').forEach(el=>{ el.innerHTML='<span class="em">🔥</span> '+(live?'<b>'+live+'</b> '+(live===1?'يوم':'أيام'):'ابدأ سلسلتك'); el.title=live?'سلسلة أيام متتالية. أفضل سلسلة: '+(k.best||live):'ذاكر النهارده وابدأ سلسلة أيام'; });
     const lv=levelOf(s.xp||0); let st=document.getElementById('lvstrip');
     if(!st){ const h=document.querySelector('header.topbar'); if(h){ st=document.createElement('div'); st.id='lvstrip'; st.className='lvstrip'; h.insertAdjacentElement('afterend',st); } }
-    if(st){ const g=s.goal||50, dx=(s.daily&&s.daily.d===dayKey())?s.daily.xp:0, dp=Math.min(1,dx/g), C=2*Math.PI*11, bp=(location.pathname.indexOf('/lessons/')>-1?'../':'')+'progress.html#badges', nb=Object.keys(s.badges||{}).length;
+    if(st){ const g=s.goal||200, dx=(s.daily&&s.daily.d===dayKey())?s.daily.xp:0, dp=Math.min(1,dx/g), C=2*Math.PI*11, bp=(location.pathname.indexOf('/lessons/')>-1?'../':'')+'progress.html#badges', nb=Object.keys(s.badges||{}).length;
       const ring='<svg class="ring" width="30" height="30" viewBox="0 0 28 28" role="img" aria-label="الهدف اليومي: '+Math.min(dx,g)+' من '+g+' نقطة"><circle cx="14" cy="14" r="11" fill="none" stroke="#e5e5e5" stroke-width="4"/><circle cx="14" cy="14" r="11" fill="none" stroke="'+(dp>=1?'#58cc02':'#1cb0f6')+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+(C*dp).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 14 14)"/>'+(dp>=1?'<text x="14" y="18.5" text-anchor="middle" font-size="12" fill="#58cc02" font-weight="900">✓</text>':'')+'</svg>';
       st.innerHTML='<div class="wrap">'+ring+'<span class="lvn">مستوى '+lv.L+'</span><span class="lvbar" role="progressbar" aria-label="التقدم للمستوى التالي" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+lv.pct+'"><i style="width:'+lv.pct+'%"></i></span><span class="lvx">'+(s.xp||0)+' / '+lv.hi+'</span><a class="lvb" href="'+bp+'" aria-label="أوسمتي: '+nb+'">🏅 '+nb+'</a></div>'; } }
   flushToasts(); renderBadges(); a11y();
