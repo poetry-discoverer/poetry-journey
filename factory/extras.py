@@ -1,7 +1,7 @@
 # extras.py <root>: "ملفات PDF إضافية" section on track-history / track-mythology from the lists below (idempotent). Add new batches to EX.
 import re,sys
 R=sys.argv[1]
-EX={'history':[('الكورس كامل (الدروس 1 إلى 47): إنجليزي مبسط','history-en-L1-L47.pdf'),('الكورس كامل (الدروس 1 إلى 47): إنجليزي + مصري','history-combined-L1-L47.pdf'),('الكورس كامل (الدروس 1 إلى 47): ملخصات الدروس','history-summaries-L1-L47.pdf'),('الكورس كامل (الدروس 1 إلى 47): ملخص الكورس (إنجليزي وعربي)','history-course-summary-L1-L47.pdf'),
+EX={'history':[('الكورس كامل (الدروس 1 إلى 104): إنجليزي مبسط','history-en-L1-L104.pdf'),('الكورس كامل (الدروس 1 إلى 104): إنجليزي + مصري','history-combined-L1-L104.pdf'),('الكورس كامل (الدروس 1 إلى 104): ملخصات الدروس','history-summaries-L1-L104.pdf'),('الكورس كامل: نظرة عامة على الكورس','history-course-overview-L998.pdf'),('ملخص الكورس (الدروس 1 إلى 47): إنجليزي وعربي','history-course-summary-L1-L47.pdf'),
  ('الدروس 32 إلى 35: إنجليزي مبسط','history-en-L32-L35.pdf'),('الدروس 32 إلى 35: إنجليزي + مصري','history-combined-L32-L35.pdf'),('الدروس 32 إلى 35: ملخصات','history-summaries-L32-L35.pdf'),
  ('الدروس 36 إلى 37: إنجليزي مبسط','history-en-L36-L37.pdf'),('الدروس 36 إلى 37: إنجليزي + مصري','history-combined-L36-L37.pdf'),('الدروس 36 إلى 37: ملخصات','history-summaries-L36-L37.pdf'),
  ('الدروس 38 إلى 39: إنجليزي مبسط','history-en-L38-L39.pdf'),('الدروس 38 إلى 39: إنجليزي + مصري','history-combined-L38-L39.pdf'),('الدروس 38 إلى 39: ملخصات','history-summaries-L38-L39.pdf'),
@@ -27,12 +27,15 @@ for a,b in _P:
     sfx=f'{a}-{b}' if b else a;tt=f'الدروس {int(a)} و{int(b)}' if b else f'الدرس {int(a)}'
     EX['poetry']+=[(f'تحليل القصائد، {tt}: إنجليزي مبسط (A2-B1)',f'poetry-{sfx}-English-A2B1.pdf'),(f'تحليل القصائد، {tt}: إنجليزي + عربي',f'poetry-{sfx}-English-Arabic.pdf')]
 EX['grammar-c2']=[]
-for r,t in [('L01-L04','1 إلى 4'),('L05-L06','5 و6'),('L07-L09','7 إلى 9'),('L10-L12','10 إلى 12'),('L13-L15','13 إلى 15'),('L16-L18','16 إلى 18'),('L19-L21','19 إلى 21'),('L22-L24','22 إلى 24'),('L25-L26','25 و26'),('L27-L29','27 إلى 29'),('L30-L32','30 إلى 32'),('L33-L35','33 إلى 35')]:
+for r,t in [('L01-L04','1 إلى 4'),('L05-L06','5 و6'),('L07-L09','7 إلى 9'),('L10-L12','10 إلى 12'),('L13-L15','13 إلى 15'),('L16-L18','16 إلى 18'),('L19-L21','19 إلى 21'),('L22-L24','22 إلى 24'),('L25-L26','25 و26'),('L27-L29','27 إلى 29'),('L30-L32','30 إلى 32'),('L33-L35','33 إلى 35'),('L36-L38','36 إلى 38')]:
     EX['grammar-c2']+=[(f'القواعد المتقدمة، الدروس {t}: إنجليزي مبسط',f'grammar-c2-en-{r}.pdf'),(f'القواعد المتقدمة، الدروس {t}: إنجليزي + مصري',f'grammar-c2-combined-{r}.pdf'),(f'القواعد المتقدمة، الدروس {t}: ملخصات الدروس',f'grammar-c2-summaries-{r}.pdf')]
 EX['comp']=[]
 for r,t in [('01','1'),('02-05','2 إلى 5'),('06-09','6 إلى 9'),('10-13','10 إلى 13'),('14-18','14 إلى 18')]:
     EX['comp']+=[(f'الفهم والقراءة، الدروس {t}: إنجليزي مبسط',f'comp-en-{r}.pdf'),(f'الفهم والقراءة، الدروس {t}: إنجليزي + مصري',f'comp-combined-{r}.pdf'),(f'الفهم والقراءة، الدروس {t}: ملخصات',f'comp-summaries-{r}.pdf')]
 EX['history']+=[('الدروس 48 إلى 52: إنجليزي مبسط','history-en-L48-L52.pdf'),('الدروس 48 إلى 52: إنجليزي + مصري','history-combined-L48-L52.pdf'),('الدروس 48 إلى 52: ملخصات','history-summaries-L48-L52.pdf'),('الدروس 53 إلى 55: إنجليزي مبسط','history-en-L53-L55.pdf'),('الدروس 53 إلى 55: إنجليزي + مصري','history-combined-L53-L55.pdf'),('الدروس 53 إلى 55: ملخصات','history-summaries-L53-L55.pdf'),('الدروس 101 إلى 104: إنجليزي مبسط','history-en-L101-L104.pdf'),('الدروس 101 إلى 104: إنجليزي + مصري','history-combined-L101-L104.pdf'),('الدروس 101 إلى 104: ملخصات','history-summaries-L101-L104.pdf')]
+EX['grammar']=[('القواعد، الدروس 1 و2: إنجليزي مبسط (A2-B1)','grammar-01-02-English-A2B1.pdf'),('القواعد، الدروس 1 و2: إنجليزي + عربي','grammar-01-02-English-Arabic.pdf')]
+for t,ar in [('essay','الإنشاء'),('skills','المهارات')]:
+    EX[t]=[(f'{ar}، الدروس 1 إلى 3: إنجليزي مبسط',f'{t}-en-L01-L03.pdf'),(f'{ar}، الدروس 1 إلى 3: إنجليزي + مصري',f'{t}-combined-L01-L03.pdf'),(f'{ar}، الدروس 1 إلى 3: ملخصات',f'{t}-summaries-L01-L03.pdf')]
 for t,L in EX.items():
     f=f'{R}/track-{t}.html';s=open(f,encoding='utf-8').read()
     s=re.sub(r'<div class="extra-files">.*?</div>\n?','',s,flags=re.S)
