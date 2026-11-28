@@ -1074,3 +1074,95 @@ grammar-c2-39:29|locutionary act|illocutionary act|constative act
 grammar-c2-39:30|assertive|declarative|direct speech act
 grammar-c2-40:26|Relation|Manner|Quality
 grammar-c2-40:27|Quality|Quantity|Manner
+psy-01:35|acquisition|production|perception of speech sounds only
+psy-01:36|دراسة الأخطاء اللغوية في الترجمة|دراسة تأثير الأمراض النفسية على الكلام|دراسة كيف اتغيرت اللغات عبر التاريخ
+psy-02:28|دراسة لغة أجنبية بشكل رسمي في الفصل|ترجمة لغة للتانية بدقة|حفظ قواعد اللغة قبل بدء الكلام
+psy-02:30|الإنجليزي بس هي L1 والعربي L2|مستحيل يكتسبهم من غير حصص|لازم يتعلم الأولى بالحصص الأول
+psy-02:31|تواصل طبيعي من غير تفكير في القواعد|طلاقة بتيجي من التعرض اليومي|اكتساب غير واعي بيحصل في البيت
+psy-03:27|بحفظ قواعد مكتوبة من الكتب|بنظام جرامر فطري موجود في المخ|بالتفاعل الاجتماعي مع المتخصصين بس
+psy-03:29|طفل بيتمدح لما بينطق صح|طفل بيسمع كلام الكبار كتير|طفل بيكرر كلمة milk بعد أمه
+psy-04:29|طريقة تدريس بتعتمد على الحفظ|كتاب جرامر مدرسي معتمد|مرحلة من مراحل نمو الطفل
+psy-04:30|الجرامر بيتعلم في المدرسة|الأطفال بتتعلم بالتقليد فقط|كل الناس بتتكلم نفس اللغة
+psy-05:32|Skinner|Chomsky|Krashen
+psy-05:33|نتيجة الفطرة الوراثية فقط|مستحيل يتفسر علميًا|نتيجة التعزيز والمكافأة فقط
+psy-06:29|كلام عن المستقبل البعيد|كلام رسمي في المناسبات|كلام عن ذكريات الماضي
+psy-06:30|إن الطفل بيحفظ الردود من الأم|إن اللغة بتتعلم بالتعزيز فقط|إن الفطرة هي اللي بتفسر الرد
+psy-07:38|Two-word stage|Cooing|One-word stage
+psy-07:39|Telegraphic stage|Crying|Cooing
+psy-07:41|٦ شهور|٣ سنين|٢٤ شهر
+psy-08:38|Telegraphic speech|Cooing|Holophrase
+psy-08:39|جمل معقدة وطويلة|أصوات من غير معنى|كلمة واحدة بتعبر عن جملة
+psy-09:29|الطفل مش فاهم الجملة خالص|الطفل بيقلد بالظبط كل كلمة|الطفل بيتصحح من أول مرة
+psy-09:30|سكت ومرد مرة تانية|قبل التصحيح وغيّر الكلمة|قلد الأم وقال held
+psy-09:31|البكاء في أول شهور|الـ cooing|نطق كلمة mama بشكل صح
+psy-09:32|بيحفظ الجمل كلها بس|راس فاضي بيتملي بالتقليد|مش بيفهم اللي بيسمعه
+psy-10:30|الجمع -s|-ing|حرف الجر in
+psy-10:31|Holophrase|Babbling|Telegraphic speech
+psy-11:26|مرحلة ٣|مفيش نفي في المرحلة دي|مرحلة ٢
+psy-12:28|Inversion|Babbling|Overextension
+psy-12:30|في البابلنج|بدري جدًا قبل الكلام|قبل سن سنتين
+psy-13:22|حذف مقطع كامل|تكرار مقطع|استبدال صوت بصوت
+psy-13:25|مفيش فروق صوتية أصلًا|فروق لغته بس|الكلمات المكتوبة بس
+psy-14:31|حذف مقطع كامل|تكرار مقطع|استبدال صوت بصوت
+psy-14:32|-ing|الجمع -s|الماضي -ed
+psy-14:33|Overextension|Holophrase|Babbling
+psy-16:28|٢٠-٣٠|٥٠+|٣-٥
+psy-16:29|Inversion|Holophrase|LAD
+psy-16:30|مش بيتعلم أصلًا|أضعف من غيره|مفيش فرق بينه وبين غيره
+psy-17:28|Task-based|Communicative|Audiolingual
+psy-17:31|الفطرة|الترجمة|الكتابة الإبداعية
+psy-18:31|تعرض كتير للغة الأصلية|مفيش أي سبب|Transfer إيجابي من اللغة الأولى
+psy-19:25|حفظ مفردات من القاموس|كلام المدرس بس من غير تفاعل|ترجمة النص كلمة كلمة
+psy-19:28|حفظ قوائم مفردات|معرفة أكتر عن القواعد|كتابة مقالات صحيحة
+psy-20:30|Grammatical|Strategic|Discourse
+psy-21:24|Phonological|Grammatical|Strategic
+psy-21:25|٣-٥|٢٥-٣٥|٥٠+
+psy-21:26|من الكتابة الرسمية|من الحفظ والتكرار|من الترجمة الحرفية
+psy-22:37|Conceptualization|Articulation|Lexical selection
+psy-23:24|بالطول|أبجديًا|بالعمر
+psy-23:26|ترابطي|دلالي|صوتي
+psy-24:29|Articulation|Lemma|Phonological encoding
+psy-25:34|ترتيب جملة|تهجئة كلمة|ترجمة كلمة
+psy-25:36|الذاكرة بتتلف|الكلمة مش موجودة في الـ lexicon|مفيش دليل على حاجة
+psy-25:37|مفيش فايدة منها|بتمنع الدراسة|بتأثر على كل اللغة بالتساوي
+psy-26:22|Critical Period|Interlanguage|Levelt
+psy-26:23|الترجمة بين اللغات|الكتابة|النطق
+psy-26:26|دايمًا مع بعض|مفيهاش فرق|مش موجودة
+psy-27:25|Articulation|Lemma|Lexeme
+psy-27:26|Aphasia|TOT|Spoonerism
+psy-27:27|Antonym|Syntactic|Semantic
+psy-27:28|الصوت فقط|النطق|الكتابة
+psy-27:30|خطأ نحوي|الكلمة ضاعت|مفيش علاقة
+psy-27:31|Interlanguage|Input hypothesis|Critical period
+psy-27:32|نحو|معنى|مفهوم
+psy-28:26|ترجمة النص|كتابة النص|نطق الكلام
+psy-28:27|Semantics|Pragmatics|Syntax
+psy-28:28|Perception|Lexical access|Syntax
+psy-29:30|الصرف|النحو|القراءة
+psy-29:31|النطق|الإملاء|تحديد الحروف
+psy-29:32|المعنى|الصوت|النحو
+psy-29:33|t + eacher|te + acher|tea + cher
+psy-29:34|ممنوع|مضمون دايمًا|مش موجود
+psy-30:30|نطق|تهجئة|تحديد الأصوات
+psy-30:31|priming|anaphora|TOT
+psy-30:32|نسيان|تكرار|نطق غلط
+psy-31:34|اللي بيتأثر|الوجهة|الأداة
+psy-31:35|TOT|غموض نحوي|priming
+psy-31:36|Priming|Articulation|Segmentation
+psy-31:37|تهجئة|نطق|ترجمة
+psy-32:29|Syntax|Situational|Phonology
+psy-33:29|Causal|Elaborative|مفيش
+psy-33:31|Referential|Causal|Syntactic
+psy-33:32|مفيش|النطق فقط|تهجئة فقط
+psy-34:26|Krashen|Levelt|Chomsky
+psy-34:27|تهجئة|حذف التفسيرات|نطق
+psy-34:28|مفيش|تنشيط كل شيء|نطق
+psy-34:29|نسخة حرفية|صوت|تهجئة
+psy-35:28|المنبه|النطق|الخط
+psy-35:29|السمع|الدلالة فقط|الإملاء
+psy-35:30|ERP|EEG|Eye-tracking
+psy-35:31|ميكروفون|تلسكوب|مسطرة
+psy-36:39|Syntax ثم Perception|مفيش ترتيب|Pragmatics أول
+psy-36:40|TOT|Priming|Anaphora
+psy-36:41|Goal|Agent|Patient
+psy-36:42|Lemma|Priming|Segmentation
