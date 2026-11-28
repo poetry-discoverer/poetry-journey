@@ -342,10 +342,10 @@ if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(
 (function(){try{
 var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
 var ex=null,fired=0;
-function go(){try{var n=Date.now();if(n-fired<4000)return;fired=n;if(!ex){ex=new Audio(base+'alhamdulillah.mp3')}ex.currentTime=0;var q=ex.play();if(q&&q.catch)q.catch(function(){})}catch(e){}}
+var lk=0;['click','pointerdown','touchstart','keydown'].forEach(function(ev){document.addEventListener(ev,function(){lk=Date.now()},true)});
+function go(){try{var n=Date.now();if(n-lk<3000)return;if(n-fired<4000)return;fired=n;if(!ex){ex=new Audio(base+'alhamdulillah.mp3')}ex.currentTime=0;var q=ex.play();if(q&&q.catch)q.catch(function(){})}catch(e){}}
 function pre(){try{if(!ex){ex=new Audio(base+'alhamdulillah.mp3');ex.preload='auto';ex.load()}}catch(e){}}
 setTimeout(pre,1500);
-addEventListener('pagehide',go);
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')go()});
 }catch(e){}})();
 
