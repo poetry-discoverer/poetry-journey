@@ -3,7 +3,8 @@ R='/tmp/repo/'
 J=sorted(glob.glob('/downloads/phrasal_lessons_content_*.json'),key=lambda p:int(re.search(r'1-(\d+)-',p).group(1)))[-1]
 L=json.load(open(J,encoding='utf-8'))
 ALLV=[v for l in L for v in l['items']]
-L=[l for l in L if l['lesson']>=38]
+for l in L: l.setdefault('lesson',l.get('legacy_lesson'))
+L=[l for l in L if l['section']=='phrasal_level2' or l['lesson']>=38]
 rnd=random.Random(11)
 def en(t): return '<span class="en" dir="ltr">'+html.escape(t,quote=False)+'</span>'
 def ent(t): return html.escape(t,quote=False)
