@@ -296,7 +296,7 @@ var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return
 var p=location.pathname;
 function credit(){var f=document.querySelector('.footer');if(!f||f.querySelector('.bsm-credit'))return;var c=document.createElement('div');c.className='bsm-credit';c.setAttribute('style','margin-top:6px;font-size:.8rem;opacity:.75');c.textContent='\u0628\u0633\u0645\u0644\u0629 \u0628\u0635\u0648\u062A \u0645\u0634\u0627\u0631\u064A \u0627\u0644\u0639\u0641\u0627\u0633\u064A - everyayah.com';f.appendChild(c)}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',credit);else credit();
-if(!/(\/|index\.html|track-[^\/]*\.html|modules-tefl[^\/]*\.html)$/.test(p))return;
+if(!/(\/|index\.html|offline\.html|studied\.html|progress\.html|review\.html|exams\.html|glossary\.html|track-[^\/]*\.html|module[^\/]*\.html)$/.test(p))return;
 var EV=['pointerdown','touchstart','keydown','click'];
 function run(){if(window.__wlcSplash)return;var a=new Audio(base+'basmala.mp3');a.preload='auto';var done=false;
 function off(){done=true;EV.forEach(function(t){document.removeEventListener(t,go,true)})}
@@ -316,4 +316,24 @@ function all(r){[].forEach.call((r||document).querySelectorAll('a.pdf-link,a.cou
 function go(){all();new MutationObserver(function(m){all()}).observe(document.body,{childList:true,subtree:true})}
 if(document.body)go();else addEventListener('DOMContentLoaded',go);
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a.pdf-link');if(a)fix(a)},true);
+}catch(e){}})();
+
+/* alhamdulillah-on-completion (Alafasy, ignores mute, silent on failure) */
+(function(){try{
+var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
+var last=0,aud=null;
+function hamd(){try{var n=Date.now();if(n-last<9000)return;last=n;if(!aud){aud=new Audio(base+'alhamdulillah.mp3');aud.preload='auto'}aud.currentTime=0;var q=aud.play();if(q&&q.catch)q.catch(function(){})}catch(e){}}
+window.__hamd=hamd;
+function hit(nd){try{if(!nd||nd.nodeType!==1)return false;
+if(nd.id==='plfin'||(nd.querySelector&&nd.querySelector('#plfin')))return true;
+var s=nd.querySelectorAll?nd.querySelectorAll('div[style*="font-size:64px"]'):[];
+for(var i=0;i<s.length;i++){if(/%/.test(s[i].textContent))return true}
+if(nd.getAttribute&&/font-size:64px/.test(nd.getAttribute('style')||'')&&/%/.test(nd.textContent))return true}catch(e){}return false}
+function start(){try{
+new MutationObserver(function(ms){for(var i=0;i<ms.length;i++){var a=ms[i].addedNodes;for(var j=0;j<a.length;j++){if(hit(a[j])){hamd();return}}}}).observe(document.body,{childList:true,subtree:true});
+document.addEventListener('click',function(e){try{var t=e.target;if(t&&t.closest&&(t.closest('#plfin')||t.closest('[data-complete]')))hamd()}catch(x){}},true);
+}catch(e){}}
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',start);else start();
+function cr(){var c=document.querySelector('.bsm-credit');if(c&&c.textContent.indexOf('\u0627\u0644\u062D\u0645\u062F')<0)c.textContent='\u0627\u0644\u0628\u0633\u0645\u0644\u0629 \u0648\u00AB\u0627\u0644\u062D\u0645\u062F \u0644\u0644\u0647 \u0631\u0628 \u0627\u0644\u0639\u0627\u0644\u0645\u064A\u0646\u00BB \u0628\u0635\u0648\u062A \u0645\u0634\u0627\u0631\u064A \u0627\u0644\u0639\u0641\u0627\u0633\u064A - everyayah.com'}
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(cr,0)});else setTimeout(cr,0);
 }catch(e){}})();
