@@ -227,3 +227,19 @@ window.PRAISE=function(p,s){
 function r(){tgt(st().xp);if(/[?&]praisedemo/.test(location.search))setTimeout(function(){show('points',100)},1200)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',r);else r();
 })();
+
+/* welcome-splash */
+(function(){try{
+if(sessionStorage.getItem('wlc1'))return; sessionStorage.setItem('wlc1','1');
+var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var st=document.createElement('style');
+st.textContent='#wlc{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#58cc02,#1cb0f6);color:#fff;text-align:center;padding:24px;opacity:1;transition:opacity .5s}#wlc.out{opacity:0}#wlc .wb{max-width:440px}#wlc .sun{font-size:84px;line-height:1;display:block;'+(rm?'':'animation:wsun 1.2s ease-out both')+'}#wlc h2{margin:14px 0 4px;font-size:30px;font-weight:900;color:#fff}#wlc .en{direction:ltr;font-family:Nunito,system-ui,sans-serif;font-weight:700;opacity:.95;font-size:17px;margin:0 0 12px}#wlc p{margin:6px 0;font-size:20px;font-weight:800;line-height:1.6;color:#fff}#wlc .l{'+(rm?'':'opacity:0;animation:wup .7s ease-out forwards')+'}#wlc button{margin-top:22px;border:0;border-radius:16px;background:#fff;color:#1a8a00;font:inherit;font-weight:900;font-size:18px;padding:12px 28px;box-shadow:0 4px 0 rgba(0,0,0,.2);cursor:pointer}@keyframes wsun{from{transform:scale(.3) rotate(-40deg);opacity:0}to{transform:none;opacity:1}}@keyframes wup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}';
+document.head.appendChild(st);
+var d=document.createElement('div');d.id='wlc';d.setAttribute('role','dialog');d.setAttribute('aria-label','ترحيب');
+function L(t,i){return ' class="l" style="animation-delay:'+i*0.35+'s"'}
+d.innerHTML='<div class="wb"><span class="sun">☀️</span><h2'+L(0,1)+'>أهلًا بيك! يوم جديد بيبدأ</h2><div class="en l" style="animation-delay:.5s">Welcome! A new day is starting.</div><p'+L(0,2)+'>يلا نذاكر ونوصل لأهدافنا</p><div class="en l" style="animation-delay:1s">Let\u2019s study and reach our goals.</div><p'+L(0,4)+'>وخلّينا نشتغل شغل حلو سوا</p><div class="en l" style="animation-delay:1.7s">Let\u2019s do good work together.</div><button type="button">يلا نبدأ \u00b7 Let\u2019s go</button></div>';
+function close(){if(!d.parentNode)return;d.classList.add('out');setTimeout(function(){d.remove();st.remove()},500)}
+d.addEventListener('click',close);document.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+function show(){document.body.appendChild(d);setTimeout(close,5500)}
+if(document.body)show();else addEventListener('DOMContentLoaded',show);
+}catch(e){}})();
