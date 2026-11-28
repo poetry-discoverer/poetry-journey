@@ -337,3 +337,14 @@ if(document.readyState==='loading')addEventListener('DOMContentLoaded',start);el
 function cr(){var c=document.querySelector('.bsm-credit');if(c&&c.textContent.indexOf('\u0627\u0644\u062D\u0645\u062F')<0)c.textContent='\u0627\u0644\u0628\u0633\u0645\u0644\u0629 \u0648\u00AB\u0627\u0644\u062D\u0645\u062F \u0644\u0644\u0647 \u0631\u0628 \u0627\u0644\u0639\u0627\u0644\u0645\u064A\u0646\u00BB \u0628\u0635\u0648\u062A \u0645\u0634\u0627\u0631\u064A \u0627\u0644\u0639\u0641\u0627\u0633\u064A - everyayah.com'}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(cr,0)});else setTimeout(cr,0);
 }catch(e){}})();
+
+/* alhamdulillah-on-exit (best effort: mobile browsers may block audio once hidden) */
+(function(){try{
+var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
+var ex=null,fired=0;
+function go(){try{var n=Date.now();if(n-fired<4000)return;fired=n;if(!ex){ex=new Audio(base+'alhamdulillah.mp3')}ex.currentTime=0;var q=ex.play();if(q&&q.catch)q.catch(function(){})}catch(e){}}
+function pre(){try{if(!ex){ex=new Audio(base+'alhamdulillah.mp3');ex.preload='auto';ex.load()}}catch(e){}}
+setTimeout(pre,1500);
+addEventListener('pagehide',go);
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')go()});
+}catch(e){}})();
