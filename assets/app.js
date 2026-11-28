@@ -380,3 +380,17 @@ else document.addEventListener('click',function(e){try{var l=e.target&&e.target.
 P.play=function(){try{var s=this.currentSrc||this.src||'';if(/\/(basmala|salawat|alhamdulillah)\.mp3/.test(s)){
 if(cur&&cur!==this&&!cur.ended&&!cur.paused&&cur.currentTime>0){return Promise.resolve()}
 cur=this}}catch(e){}return op.apply(this,arguments)}}catch(e){}})();
+
+/* in-app exit button (home page): alhamdulillah through the queue, then close as the platform allows */
+(function(){try{
+var base='';try{var sc=[].slice.call(document.scripts).filter(function(x){return /assets\/app\.js/.test(x.src)})[0];base=sc.src.replace(/app\.js.*$/,'')}catch(e){}
+var root=new URL(base+'../',location.href).pathname,p=location.pathname;
+if(!(p===root||p===root+'index.html'))return;
+function mk(){var f=document.querySelector('.footer');if(!f||document.getElementById('exitbtn'))return;
+var b=document.createElement('button');b.id='exitbtn';b.type='button';b.textContent='\u062E\u0631\u0648\u062C \uD83D\uDEAA';
+b.setAttribute('style','display:block;margin:12px auto 4px;padding:10px 26px;border-radius:14px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;cursor:pointer');
+b.addEventListener('click',function(){var done=false;function leave(){if(done)return;done=true;try{window.close()}catch(e){}setTimeout(function(){if(!window.closed){b.textContent='\u0627\u0642\u0641\u0644 \u0627\u0644\u062A\u0637\u0628\u064A\u0642 \u0645\u0646 \u0632\u0631\u0627\u0631 \u0627\u0644\u0647\u0648\u0645 \u0623\u0648 \u0627\u0644\u062A\u0627\u0628'}},400)}
+try{window.__lastClickGuard=1;var a=new Audio(base+'alhamdulillah.mp3');a.addEventListener('ended',leave);var q=a.play();if(q&&q.catch)q.catch(leave);setTimeout(leave,7000)}catch(e){leave()}});
+f.insertBefore(b,f.firstChild)}
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(mk,80)});else setTimeout(mk,80);
+}catch(e){}})();
