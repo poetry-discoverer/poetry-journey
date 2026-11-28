@@ -95,11 +95,44 @@ function fixedExam(e){ const n=e.items.length, secs=(e.minutes||Math.ceil(n*0.75
     const passed=pct>=pass;
     el('<div class="plan-card" style="text-align:center"><div style="font-size:64px;font-weight:900;color:'+(passed?'#58cc02':'#ff4b4b')+'">'+pct+'%</div><h2>'+(passed?'نجحت 🎉':'لسه محتاج مراجعة 📚')+'</h2><p>'+ok+' من '+n+' · '+fmt(used)+' دقيقة · حد النجاح '+pass+'%</p><p style="color:#666">أفضل نتيجة: '+r.best+'% · المحاولات: '+r.n+' · +'+(ok*2)+' نقطة</p></div>'+
       (bad.length?'<h3 style="margin:18px 0 8px">الأسئلة اللي غلطت فيها:</h3>'+bad.map(([p,k])=>{ const sl=p.ms?k:(k>=0?[k]:[]); return '<div class="plan-card" style="margin-bottom:12px"><div style="font-size:20px;font-weight:800;margin-bottom:8px">'+qLayers(p.b)+'</div>'+(sl.length?'':'<div style="color:#b30000;font-weight:800">من غير إجابة</div>')+optReview(p,sl)+(p.b.l?'<a href="lessons/'+p.b.l+'.html" style="font-weight:900;color:#0b6fa8">راجع الدرس</a>':'')+'</div>'; }).join(''):'')+
-      '<button class="pl-next" id="qagain">نموذج تاني من نفس الامتحان</button><a class="pl-next" href="exams.html" style="text-align:center;text-decoration:none;margin-top:12px;background:#1cb0f6;box-shadow:0 6px 0 #1899d6">رجوع للامتحانات</a>');
-    document.getElementById('qagain').onclick=()=>fixedExam(e); }
+      '<button class="pl-next" id="qagain">نموذج تاني من نفس الامتحان</button><a class="pl-next" href="'+(e.back||'exams.html')+'" style="text-align:center;text-decoration:none;margin-top:12px;background:#1cb0f6;box-shadow:0 6px 0 #1899d6">'+(e.backT||'رجوع للامتحانات')+'</a>');
+    document.getElementById('qagain').onclick=()=>fixedExam(e.regen?e.regen():e); }
   tm=setInterval(()=>{ left--; const t=document.getElementById('qt'); if(t) t.textContent=fmt(Math.max(left,0)); if(left<=0){ clearInterval(tm); alert('انتهى الوقت'); finish(); } },1000);
   show(); }
 // ---- spaced review
+
+// ---- exam on what the student studied (local progress only)
+const CN={poetry:'الشعر',myth:'الأساطير',history:'تاريخ الأدب',analysis:'تحليل القصائد',intensive:'النقد',grammar:'القواعد',psy:'علم النفس',verb:'الأفعال',phrasal:'Phrasal verbs',collocations:'Collocations'};
+function studiedMap(){ const s=S(), m={}; const sx=s.sx||{};
+  Object.keys(s.done||{}).forEach(l=>m[l]=1e9);
+  Object.keys(s.steps||{}).forEach(l=>{ if((s.steps[l]||0)>0) m[l]=Math.max(m[l]||0,s.steps[l]); });
+  Object.keys(sx).forEach(k=>{ const q=k.indexOf(':lc:'); if(q>0){ const l=k.slice(0,q), i=+k.slice(q+4); if(m[l]!==1e9) m[l]=Math.max(m[l]||0,i); } });
+  return m; }
+function studiedPool(){ const m=studiedMap(); return BANK.filter(b=>{ const l=b.l||b.id.split(':')[0]; if(!(l in m)) return false; if(m[l]>=1e9) return true; const i=+b.id.split(':')[1]; return isNaN(i)||i<=m[l]; }); }
+function lessonNum(l){ const m=l.match(/(\d+)$/); return m?+m[1]:0; }
+function studiedHome(){ const P=studiedPool(); const m=studiedMap();
+  if(!P.length){ el('<div class="plan-card" style="text-align:center"><div style="font-size:56px">📖</div><h2>لسه مذاكرتش حاجة</h2><p style="color:#666">ذاكر كام درس وارجع هنا، وهتلاقي امتحان على اللي خلصته بس.</p><a class="pl-next" href="index.html" style="display:block;text-align:center;text-decoration:none">ابدأ مذاكرة</a></div>'); return; }
+  const courses={}; P.forEach(b=>{ const c=courses[b.c]=courses[b.c]||{}; (c[b.l]=c[b.l]||{t:b.lt,n:0}).n++; });
+  let selC='all', selL={}, cnt=20;
+  function chosen(){ return P.filter(b=>(selC==='all'||b.c===selC)&&(selC==='all'||selL[b.l]!==false)); }
+  function draw(){ const pool=chosen(); const max=pool.length;
+    let h='<div class="plan-card" style="margin-bottom:14px"><h2 style="margin:0 0 6px">📝 امتحان على اللي ذاكرته</h2><p style="color:#666;margin:0">فيه <b>'+P.length+'</b> سؤال من <b>'+Object.keys(P.reduce((a,b)=>(a[b.l]=1,a),{})).length+'</b> درس ذاكرتهم على الجهاز ده. الامتحان بيتبني منهم بس.</p></div>';
+    h+='<div class="plan-card" style="margin-bottom:14px"><h3 style="margin:0 0 10px">١) اختار المنهج</h3><div style="display:flex;gap:8px;flex-wrap:wrap">'+
+      '<button class="stch" data-c="all" style="'+chipSt(selC==='all')+'">كل اللي ذاكرته</button>'+Object.keys(courses).map(c=>'<button class="stch" data-c="'+c+'" style="'+chipSt(selC===c)+'">'+(CN[c]||c)+'</button>').join('')+'</div>';
+    if(selC!=='all'){ const ls=Object.keys(courses[selC]).sort((a,b)=>lessonNum(a)-lessonNum(b)); h+='<div style="margin-top:12px;font-weight:800;color:#555">الدروس:</div>'+ls.map(l=>'<label style="display:flex;gap:10px;align-items:center;margin:8px 0;font-weight:700"><input type="checkbox" class="stl" data-l="'+l+'" style="width:22px;height:22px"'+(selL[l]===false?'':' checked')+'><span>'+esc2(courses[selC][l].t||l)+' <span style="color:#888">('+courses[selC][l].n+')</span></span></label>').join(''); }
+    h+='</div>';
+    const opts=[10,20,30,50].filter(x=>x<max); opts.push(max);
+    if(cnt>max) cnt=max;
+    h+='<div class="plan-card" style="margin-bottom:14px"><h3 style="margin:0 0 10px">٢) عدد الأسئلة</h3><div style="display:flex;gap:8px;flex-wrap:wrap">'+opts.map(x=>'<button class="stn" data-n="'+x+'" style="'+chipSt(cnt===x)+'">'+(x===max?'الكل ('+x+')':x)+'</button>').join('')+'</div><p style="color:#666;margin:10px 0 0">الوقت: '+Math.ceil(cnt*0.75)+' دقيقة</p></div>';
+    h+=max?'<button class="pl-next" id="stgo">ابدأ الامتحان ('+cnt+' سؤال)</button>':'<p style="color:#b30000;font-weight:800">اختار درس واحد على الأقل</p>';
+    el(h);
+    root.querySelectorAll('.stch').forEach(b=>b.onclick=()=>{ selC=b.dataset.c; selL={}; draw(); });
+    root.querySelectorAll('.stl').forEach(b=>b.onchange=()=>{ selL[b.dataset.l]=b.checked; draw(); });
+    root.querySelectorAll('.stn').forEach(b=>b.onclick=()=>{ cnt=+b.dataset.n; draw(); });
+    const go=document.getElementById('stgo'); if(go) go.onclick=()=>{ const run=()=>{ const items=shuf(chosen()).slice(0,cnt); return {id:'studied',title:'امتحان على اللي ذاكرته',items,minutes:Math.ceil(items.length*0.75),pass_percent:60,back:'studied.html',backT:'رجوع لامتحان اللي ذاكرته',regen:run}; }; fixedExam(run()); };
+  }
+  function chipSt(on){ return 'font:inherit;font-weight:800;padding:10px 16px;border-radius:14px;border:2px solid '+(on?'#58cc02':'#e5e5e5')+';background:'+(on?'#e8f8d8':'#fff')+';color:#333;cursor:pointer'; }
+  draw(); }
 function due(){ const s=S(), t=Date.now(); return Object.keys(s.sr).filter(id=>byId[id]&&s.sr[id].due<=t).map(id=>byId[id]); }
 function reviewHome(){ const s=S(), d=due(), all=Object.keys(s.sr).filter(id=>byId[id]); const later=all.length-d.length; const nxt=all.filter(id=>s.sr[id].due>Date.now()).map(id=>s.sr[id].due).sort()[0];
   let h='<div class="lesson-head"><div class="emoji"><span class="em">📚</span></div><h1>المراجعة</h1><p style="color:var(--ink-soft)">أي سؤال تغلط فيه بيتحط هنا فوراً، وبيتكرر لحد ما تجاوبه صح. بعد كده بيرجعلك بعد أسبوع، لحد ما تثبت معلومتها.</p></div>';
@@ -128,5 +161,5 @@ function modTest(sets,key,back){ const E=sets[Math.floor(Math.random()*sets.leng
       (bad.length?'<h3 style="margin:18px 0 8px">الأسئلة اللي غلطت فيها (وبتتحط في «المراجعة»):</h3>'+bad.map(([p,sl])=>'<div class="plan-card" style="margin-bottom:12px"><div style="font-size:20px;font-weight:800;margin-bottom:8px">'+qLayers(p.b)+'</div>'+(sl.length?'':'<div style="color:#b30000;font-weight:800">من غير إجابة</div>')+optReview(p,sl)+(p.b.l?'<a href="lessons/'+p.b.l+'.html" style="font-weight:900;color:#0b6fa8">راجع الدرس</a>':'')+'</div>').join(''):'<p style="text-align:center;font-weight:800">كل إجاباتك صح! 🌟</p>')+
       '<button class="pl-next" id="qagain">نموذج تاني</button>'+back); document.getElementById('qagain').onclick=()=>modTest(sets,key,back); }
   show(); }
-window.addEventListener('DOMContentLoaded',()=>{ if(PAGE==='exam') { if(location.search.indexOf('m=')>-1) moduleMode(); else examHome(); } else if(PAGE==='exams') examsHome(); else reviewHome(); });
+window.addEventListener('DOMContentLoaded',()=>{ if(PAGE==='exam') { if(location.search.indexOf('m=')>-1) moduleMode(); else examHome(); } else if(PAGE==='exams') examsHome(); else if(PAGE==='studied') studiedHome(); else reviewHome(); });
 })();
