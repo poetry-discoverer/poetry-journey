@@ -254,6 +254,7 @@ function render0(){
     };
   }
   if(s.t==='end'){
+    try{ fetch('../assets/lessonexam.json').then(r=>r.ok?r.json():null).then(j=>{ const id=j&&j[LID]; const f=document.getElementById('plfin'); if(!id||!f||document.getElementById('plexam')) return; const x=document.createElement('a'); x.id='plexam'; x.className='pl-btn2'; x.href='../exams.html#'+encodeURIComponent(id); x.textContent='📝 امتحان الدرس'; x.style.cssText='display:block;text-align:center;margin-top:10px;text-decoration:none'; f.parentNode.insertBefore(x,f.nextSibling); }).catch(()=>{}); }catch(e){}
     document.getElementById('plrest').onclick=()=>{ unlocked=true; sfx('click'); idx=0; gained=0; missed=[]; reviewed=false; render(); scrollTo(0,0); };
     document.getElementById('plfin').onclick=()=>{ sfx('done'); const q=st(); if(!q.done[LID]){ q.done[LID]=Date.now(); q.xp+=20; save(q); xp(20,'🎉'); } else sv(q); const b=document.getElementById('plfin'); b.textContent='✅ الدرس متكمل'; b.disabled=true; confetti(); };
     if(st().done[LID]){ const b=document.getElementById('plfin'); b.textContent='✅ الدرس متكمل'; b.disabled=true; }
