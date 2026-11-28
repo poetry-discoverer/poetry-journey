@@ -451,14 +451,14 @@ function ap(){document.documentElement.style.zoom=z===1?'':String(z)}
 ap();
 function init(){var p=location.pathname,home=/\/(index\.html)?$/.test(p)&&!/\/lessons\//.test(p);
 var tb=document.querySelector('.topbar .wrap');if(!tb||document.getElementById('zbtn'))return;
-var b=document.createElement('button');b.id='zbtn';b.type='button';b.textContent=home?'\u2699\uFE0F \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A':'\u2699\uFE0F Aa';b.setAttribute('aria-label','\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A');
-b.setAttribute('style','margin-inline-start:auto;padding:6px 12px;border-radius:12px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;font-size:.85rem;cursor:pointer;flex:none');
+var b=document.createElement('button');b.id='zbtn';b.type='button';b.textContent='\u2699\uFE0F Aa';b.className='pill';b.setAttribute('aria-label','\u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A');
+b.setAttribute('style','white-space:nowrap;flex:none;cursor:pointer;font:inherit;font-weight:800;font-size:.9rem');
 var pn=document.createElement('div');pn.id='zpanel';pn.hidden=true;
 pn.setAttribute('style','flex:1 1 100%;order:9;display:none;gap:8px;align-items:center;justify-content:center;padding:8px 0;flex-wrap:wrap');
 function mk(t,f){var x=document.createElement('button');x.type='button';x.textContent=t;x.setAttribute('style','min-width:56px;padding:8px 14px;border-radius:12px;border:2px solid #e5e5e5;background:#fff;font:inherit;font-weight:800;font-size:1.05rem;cursor:pointer');x.addEventListener('click',function(){f();z=Math.round(Math.max(.8,Math.min(1.6,z))*100)/100;try{localStorage.setItem(K,String(z))}catch(e){}ap();lb.textContent=Math.round(z*100)+'%'});return x}
 var lb=document.createElement('span');lb.style.cssText='font-weight:800;min-width:48px;text-align:center';lb.textContent=Math.round(z*100)+'%';
 pn.appendChild(mk('A\u2212',function(){z-=.1}));pn.appendChild(lb);pn.appendChild(mk('A+',function(){z+=.1}));pn.appendChild(mk('\u21BA \u0627\u0644\u0623\u0635\u0644',function(){z=1}));
 b.addEventListener('click',function(){var o=pn.style.display==='none';pn.style.display=o?'flex':'none'});
-tb.appendChild(b);tb.appendChild(pn)}
+var st=document.querySelector('.topbar .stats');(st||tb).appendChild(b);tb.appendChild(pn)}
 if(document.readyState==='loading')addEventListener('DOMContentLoaded',function(){setTimeout(init,220)});else setTimeout(init,220);
 }catch(e){}})();
